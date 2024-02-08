@@ -348,13 +348,14 @@ public class AvatarStatDriver : MonoBehaviour {
 		}
 	}
 
+
 	/// <summary>
 	/// The mass of the pelvis, computed from the desired settings.
 	/// </summary>
 	public float EffectivePelvisMass {
 		get {
 			if (useCustomMass) {
-				if (useProportionalMassEditing) {
+				if (useProportionalMassEditing && useCustomPelvisMass) {
 					return VanillaPelvisMass * MassProportion;
 				} else if (useCustomPelvisMass) {
 					return customPelvisMass;
@@ -370,7 +371,7 @@ public class AvatarStatDriver : MonoBehaviour {
 	public float EffectiveChestMass {
 		get {
 			if (useCustomMass) {
-				if (useProportionalMassEditing) {
+				if (useProportionalMassEditing && useCustomChestMass) {
 					return VanillaChestMass * MassProportion;
 				} else if (useCustomChestMass) {
 					return customChestMass;
@@ -386,7 +387,7 @@ public class AvatarStatDriver : MonoBehaviour {
 	public float EffectiveArmMass {
 		get {
 			if (useCustomMass) {
-				if (useProportionalMassEditing) {
+				if (useProportionalMassEditing && useCustomArmMass) {
 					return VanillaArmMass * MassProportion;
 				} else if (useCustomArmMass) {
 					return customArmMass;
@@ -402,7 +403,7 @@ public class AvatarStatDriver : MonoBehaviour {
 	public float EffectiveLegMass {
 		get {
 			if (useCustomMass) {
-				if (useProportionalMassEditing) {
+				if (useProportionalMassEditing && useCustomLegMass) {
 					return VanillaLegMass * MassProportion;
 				} else if (useCustomLegMass) {
 					return customLegMass;
@@ -418,7 +419,7 @@ public class AvatarStatDriver : MonoBehaviour {
 	public float EffectiveHeadMass {
 		get {
 			if (useCustomMass) {
-				if (useProportionalMassEditing) {
+				if (useProportionalMassEditing && useCustomHeadMass) {
 					return VanillaHeadMass * MassProportion;
 				} else if (useCustomHeadMass) {
 					return customHeadMass;
@@ -427,6 +428,7 @@ public class AvatarStatDriver : MonoBehaviour {
 			return VanillaHeadMass;
 		}
 	}
+
 
 	private void Awake() {
 		_avatar = GetComponent<SLZAvatar>();
