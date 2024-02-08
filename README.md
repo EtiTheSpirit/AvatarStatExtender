@@ -5,9 +5,15 @@ Avatar Extensions is the name of a **hybrid SDK Plugin x MelonLoader mod** that 
 # How To Install
 There is a mod (that's this repo), and there's a Unity Package (for the editor, check the releases).
 
-### I want to use custom stats on an avatar I installed!...
+## Dependencies
+* [Download BoneLib](https://bonelab.thunderstore.io/package/gnonme/BoneLib/).
+* [Download FieldInjector](https://bonelab.thunderstore.io/package/WNP78/FieldInjector/)
 
-#### ...And I am on PC
+The mod will not work without these two.
+
+## I want to use custom stats on an avatar I installed!...
+
+### ...And I am on PC
 * Install MelonLoader. [Download it here](https://melonwiki.xyz/#/?id=automated-installation)
 	* YOU MUST USE MELONLOADER 0.5.7 - IF YOU DO NOT, YOUR GAME WILL CRASH AND BREAK.
 	* Launch the game without any mods installed. It will take longer than usual, but this sets it up for modding.
@@ -17,10 +23,11 @@ There is a mod (that's this repo), and there's a Unity Package (for the editor, 
 	* In the dropdown, select public_beta
 	* Wait for the update to download.
 * Install BoneLib if you haven't already. [Download BoneLib here](https://bonelab.thunderstore.io/package/gnonme/BoneLib/).
+* Install FieldInjector if you haven't already. [Download FieldInjector here](https://bonelab.thunderstore.io/package/WNP78/FieldInjector/).
 * Install this mod [by downloading it from the top most file from the Releases page](https://github.com/EtiTheSpirit/AvatarStatExtender/releases).
 * Now, if you download (or make) any avatars that use the Stat Driver, they will load their custom stats!
 
-#### ...And I am on Quest
+### ...And I am on Quest
 > ⚠ **NOTE:** This hasn't been tested on Quest and was not made for it. This mod might be very broken, and I have no way to fix it for Quest!
 
 * Install LemonLoader. [Click here for a tutorial on YouTube](https://www.youtube.com/watch?v=Ax6vAd_lGsg)
@@ -31,10 +38,11 @@ There is a mod (that's this repo), and there's a Unity Package (for the editor, 
 	* Press the Channel button, and choose public_beta
 	* The game should update. If it doesn't, try restarting your Quest.
 * Install BoneLib if you haven't already. [Download BoneLib here](https://bonelab.thunderstore.io/package/gnonme/BoneLib/).
+* Install FieldInjector if you haven't already. [Download FieldInjector here](https://bonelab.thunderstore.io/package/WNP78/FieldInjector/).
 * Install this mod [by downloading it from the top most file from the Releases page](https://github.com/EtiTheSpirit/AvatarStatExtender/releases).
 * Now, if you download (or make) any avatars that use the Stat Driver, they will load their custom stats!
 
-### I want to make / upgrade an avatar to use custom stats!
+## I want to make / upgrade an avatar to use custom stats!
 * BACK UP YOUR UNITY PROJECT. It's not necessary, but it's usually a good idea, especially since this is still in testing phase.
 * Install the Unity Editor Package [by downloading it from the top most file from the Releases page](https://github.com/EtiTheSpirit/AvatarStatExtender/releases).
 * Open your Avatar project in Unity if you haven't already.
