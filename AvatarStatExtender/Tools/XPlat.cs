@@ -1,4 +1,5 @@
-﻿using MelonLoader;
+﻿#nullable enable
+using MelonLoader;
 using System;
 using System.Collections.Generic;
 using System.Linq;

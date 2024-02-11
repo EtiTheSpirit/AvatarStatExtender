@@ -1,5 +1,6 @@
-﻿using BoneLib;
-using ExtendedAvatarStatDriver.Components;
+﻿#nullable enable
+using AvatarStatExtender.Components;
+using BoneLib;
 using MelonLoader;
 using SLZ.Rig;
 using SLZ.VRMK;
@@ -10,7 +11,6 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
-using static MelonLoader.MelonLogger;
 using SLZAvatar = SLZ.VRMK.Avatar;
 
 namespace AvatarStatExtender.Tools {
@@ -69,6 +69,35 @@ namespace AvatarStatExtender.Tools {
 		private static void ApplyStats(SLZAvatar avatar) {
 			AvatarStatDriver provider = avatar.gameObject.GetComponent<AvatarStatDriver>();
 			if (provider == null) return;
+
+			/*
+			if (Prefs.TraceLogging) {
+				Log.Trace("Trace logging is on; I am going to dump the entirety of all the avatar fields before modifying them.");
+				PropertyInfo[] props = avatar.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+				foreach (PropertyInfo property in props) {
+					try {
+						object o = property.GetValue(avatar);
+						string oStr;
+						bool wasv3 = false;
+						if (o is Vector3 v3) {
+							oStr = v3.ToString();
+							wasv3 = true;
+						} else if (o is SoftEllipse se) {
+							oStr = $"SoftEllipse[XRadius={se.XRadius}, XBias={se.XBias}, ZRadius={se.ZRadius}, ZBias={se.ZBias}]";
+						} else {
+							oStr = o.ToString();
+						}
+						if (!wasv3 && oStr == "UnityEngine.Vector3") {
+							Log.Error("There was a UnityEngine.Vector3, it was not actually a UnityEngine.Vector3. Thank you il2cpp.");
+						} else {
+							Log.Info($"{property.Name} = {oStr}");
+						}
+					} catch {
+						Log.Warn($"Failed to execute getter of {property.Name}");
+					}
+				}
+			}
+			*/
 
 			Log.Debug("Enforcing that stats are applied to the desired avatar.");
 			avatar._agility = provider.EffectiveAgility;

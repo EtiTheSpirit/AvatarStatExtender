@@ -3,38 +3,41 @@
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Nullable>Enable</Nullable>
-    <LangVersion>11</LangVersion>
+    <LangVersion>11.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{74CF3AAF-5536-4556-9992-906C2CDB571B}</ProjectGuid>
+    <ProjectGuid>{A55E452E-2B5A-4B67-BFBC-8D84D3C461E2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AvatarStatExtender</RootNamespace>
-    <AssemblyName>AvatarStatExtender</AssemblyName>
+    <RootNamespace>XansTools</RootNamespace>
+    <AssemblyName>XansTools</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <LangVersion>11</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;IS_MOD_ENVIRONMENT</DefineConstants>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <NoWarn>IDE0090</NoWarn>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <LangVersion>11</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE;IS_MOD_ENVIRONMENT</DefineConstants>
+    <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <NoWarn>IDE0090</NoWarn>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <LangVersion>11</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="0Harmony">
@@ -43,15 +46,9 @@
     <Reference Include="Assembly-CSharp">
       <HintPath>E:\Steam Games\steamapps\common\BONELAB\MelonLoader\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>
-    <Reference Include="BoneLib">
-      <HintPath>E:\Steam Games\steamapps\common\BONELAB\Mods\BoneLib.dll</HintPath>
-    </Reference>
     <Reference Include="cscompmgd, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>E:\Steam Games\steamapps\common\BONELAB\MelonLoader\Managed\cscompmgd.dll</HintPath>
-    </Reference>
-    <Reference Include="FieldInjector">
-      <HintPath>E:\Steam Games\steamapps\common\BONELAB\Mods\FieldInjector.dll</HintPath>
     </Reference>
     <Reference Include="Il2Cppmscorlib">
       <HintPath>E:\Steam Games\steamapps\common\BONELAB\MelonLoader\Managed\Il2Cppmscorlib.dll</HintPath>
@@ -100,12 +97,6 @@
     <Reference Include="UnityEngine">
       <HintPath>E:\Steam Games\steamapps\common\BONELAB\MelonLoader\Managed\UnityEngine.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.AnimationModule">
-      <HintPath>E:\Steam Games\steamapps\common\BONELAB\MelonLoader\Dependencies\Il2CppAssemblyGenerator\Cpp2IL\cpp2il_out\UnityEngine.AnimationModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.AudioModule">
-      <HintPath>E:\Steam Games\steamapps\common\BONELAB\MelonLoader\Managed\UnityEngine.AudioModule.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>E:\Steam Games\steamapps\common\BONELAB\MelonLoader\Managed\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
@@ -114,50 +105,22 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="API\SoundAPI.cs" />
-    <Compile Include="AvatarStatExtensionMod.cs" />
-    <Compile Include="BuiltInEvents\SoundBroadcastMarshaller.cs" />
-    <Compile Include="Components\AudioEntries.cs" />
-    <Compile Include="Components\AudioEntry.cs" />
-    <Compile Include="Components\AvatarExtendedAudioContainer.cs" />
-    <Compile Include="Components\AvatarStatDriver.cs" />
-    <Compile Include="Components\JumpTracker.cs" />
-    <Compile Include="Components\QuickPrefabIdentifier.cs" />
-    <Compile Include="Components\RealtimeSoundDriver.cs" />
-    <Compile Include="Data\AudioCache.cs" />
-    <Compile Include="Data\AudioEventType.cs" />
-    <Compile Include="Data\AudioEventTypeExt.cs" />
-    <Compile Include="Data\AudioPlayType.cs" />
-    <Compile Include="Data\AvatarAndPrefabPair.cs" />
-    <Compile Include="Data\FakeInspectorName.cs" />
-    <Compile Include="API\PlayableSoundData.cs" />
-    <Compile Include="Data\ReadOnlyReferenceSpan.cs" />
-    <Compile Include="Tools\ListTools.cs" />
-    <Compile Include="Data\ReadOnlyAudioEntry.cs" />
-    <Compile Include="Data\SerializableAudioArray.cs" />
+    <Compile Include="AvatarInteroperability\DamageReceptionHelper.cs" />
+    <Compile Include="Data\AttackInfo.cs" />
+    <Compile Include="Data\EventPhase.cs" />
+    <Compile Include="Data\MethodOfProvider.cs" />
+    <Compile Include="Data\BlamedEvent.cs" />
     <Compile Include="Log.cs" />
+    <Compile Include="Patching\DamageReactionFacilitator.cs" />
     <Compile Include="Prefs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tools\Assets\AssetLocator.cs" />
-    <Compile Include="Tools\PlayerObjectExtensions.cs" />
-    <Compile Include="Tools\AvatarStatCalculationExtension.cs" />
-    <Compile Include="Tools\SoundPlayerSystem.cs" />
-    <Compile Include="Tools\ReadOnlyHashSet.cs" />
-    <Compile Include="Tools\SoundBlockNameSanitizer.cs" />
-    <Compile Include="Tools\StatMarshaller.cs" />
-    <Compile Include="Tools\Tools.cs" />
-    <Compile Include="Tools\XPlat.cs" />
+    <Compile Include="Data\Utils.cs" />
+    <Compile Include="Reimplementation\AllowNullAttribute.cs" />
+    <Compile Include="Reimplementation\IsUnmanagedAttribute.cs" />
+    <Compile Include="Reimplementation\MemberNotNullAttribute.cs" />
+    <Compile Include="Reimplementation\MemberNotNullWhenAttribute.cs" />
+    <Compile Include="XTCore.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\DamageReactivity\XansTools.csproj">
-      <Project>{A55E452E-2B5A-4B67-BFBC-8D84D3C461E2}</Project>
-      <Name>XansTools</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\.editorconfig">
-      <Link>.editorconfig</Link>
-    </None>
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

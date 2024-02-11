@@ -4,8 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using XansTools.Data;
 
-namespace AvatarStatExtender {
+namespace XansTools {
 
 	/// <summary>
 	/// Provides a wider variety of logging methods for convenience.
@@ -43,22 +44,22 @@ namespace AvatarStatExtender {
 		}
 
 		public static void Debug(object msg) {
-			_log.Msg(ConsoleColor.Gray, $"[DEBUG] {msg}");
+			_log.Msg(ConsoleColor.Gray, msg);
 		}
 
 		public static void Debug(string msg) {
-			_log.Msg(ConsoleColor.Gray, $"[DEBUG] {msg}");
+			_log.Msg(ConsoleColor.Gray, msg);
 		}
 
 		public static void Trace(object msg) {
 			if (Prefs.TraceLogging) {
-				_log.Msg(ConsoleColor.DarkGray, $"[TRACE] {msg}");
+				_log.Msg(ConsoleColor.DarkGray, msg);
 			}
 		}
 
 		public static void Trace(string msg) {
 			if (Prefs.TraceLogging) {
-				_log.Msg(ConsoleColor.DarkGray, $"[TRACE] {msg}");
+				_log.Msg(ConsoleColor.DarkGray, msg);
 			}
 		}
 

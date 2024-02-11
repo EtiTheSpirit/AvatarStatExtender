@@ -1,7 +1,10 @@
+#nullable enable
 #define AVATAR_STATS_COMPUTABLE_ANYWAY
 using System;
 using UnityEngine;
 using SLZAvatar = SLZ.VRMK.Avatar;
+using System.Diagnostics.CodeAnalysis;
+
 
 #if !UNITY_EDITOR && IS_MOD_ENVIRONMENT
 // As it appears in the mod:
@@ -52,6 +55,7 @@ public class AvatarStatDriver : MonoBehaviour {
 
 	public float extraJumpVerticalVelocity;
 
+	[AllowNull]
 	private SLZAvatar _avatar;
 
 #if !UNITY_EDITOR && !AVATAR_STATS_COMPUTABLE_ANYWAY && IS_MOD_ENVIRONMENT

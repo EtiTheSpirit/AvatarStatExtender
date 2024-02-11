@@ -6,7 +6,7 @@ Avatar Extensions is the name of a **hybrid SDK Plugin x MelonLoader mod** that 
 There is a mod (that's this repo), and there's a Unity Package (for the editor, check the releases).
 
 ## Dependencies
-* [Download BoneLib](https://bonelab.thunderstore.io/package/gnonme/BoneLib/).
+* [Download BoneLib](https://bonelab.thunderstore.io/package/gnonme/BoneLib/)
 * [Download FieldInjector](https://bonelab.thunderstore.io/package/WNP78/FieldInjector/)
 
 The mod will not work without these two.

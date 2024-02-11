@@ -1,0 +1,16 @@
+﻿[*.cs]
+
+# IDE0090: Use 'new(...)'
+csharp_style_implicit_object_creation_when_type_is_apparent = false
+
+# IDE0251: Make member 'readonly'
+csharp_style_prefer_readonly_struct_member = false
+
+# IDE0270: Use coalesce expression
+dotnet_style_coalesce_expression = false
+
+# IDE0016: Use 'throw' expression
+csharp_style_throw_expression = false
+
+# IDE0051: Remove unused private members
+dotnet_diagnostic.IDE0051.severity = silent
