@@ -57,31 +57,9 @@ The mod will not work without these two.
 # I'm a modder, how did you get the vanilla stats?
 About a day straight in IDA, reading raw assembly, and translating it by hand to C#.
 
-[Anyway, here's the code](https://github.com/EtiTheSpirit/AvatarStatExtender/blob/0.1.0/AvatarStatExtender/Tools/AvatarStatCalculationExtension.cs).
+[Anyway, here's the code](https://github.com/EtiTheSpirit/AvatarStatExtender/blob/master/AvatarStatExtender/Tools/AvatarStatCalculationExtension.cs).
 
-***
-***
-
-## Component: Avatar Stat Driver
-* Preview the vanilla stats that the game comes up with for you
-* Edit all your avatar's stats and masses individually
-  * Each stat can be toggled so that you can pick and choose which ones to override or leave as their vanilla value.
-  * For mass, you can use two types of editing
-    * Proportional editing: You change your total weight. Everything else scales for you to match it.
-    * Individual editing: You choose the weight of each body part. This has a noticable effect on your physics.
-* Other bonus stats
-  * Jump velocity boost (a bit like the hyper jump mod)
-  * Maybe more
-
-## Component: Avatar Extended Audio Container
-> ⚠ **NOTE:** This component is not yet complete. While you can set it up, it won't do anything in game!
-
-* Provide an array of sound blocks. Sound blocks contain...
-  * *When* that sound should play (both preset events, but also the capability for multiple custom event names via manual string input)
-  * *How* that sound should play (choose one randomly out of the list? Play all of them at once? Also supports a string input which will call a delegate within a melon mod. Details on this later as it approaches release)
-  * The name of this sound, so that you can query it by name.
-  * The list of sounds
-  * (TO DO) An AudioSource template, which allows you to declare the physical properties of the sound. There is already a really good default provided for this, and this mostly will have an effect in multiplayer and in rooms with reverb.
+Documentation can be found [on my website](https://etithespir.it/bonelab/avatarextender/api/soundapi.html)
 
 ### Prototype Warning
 This mod is currently a prototype and thus I have not yet released it on mod.io or thunderstore.
