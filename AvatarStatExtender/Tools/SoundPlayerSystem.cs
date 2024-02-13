@@ -1,6 +1,7 @@
 ﻿#nullable enable
 using AvatarStatExtender.API;
 using AvatarStatExtender.Components;
+using AvatarStatExtender.Data;
 using BoneLib;
 using SLZ.Data;
 using SLZ.Marrow.Interaction;
@@ -17,8 +18,7 @@ using UnityEngine.Pool;
 namespace AvatarStatExtender.Tools {
 
 	/// <summary>
-	/// This class plays sounds arbitrarily. It gets its name in that it was designed for my private avatar mod, which was for the
-	/// ECLIPSE class of Chimera, a very cool and good member of a suite of amazing robot avatars for VRC.
+	/// This class plays sounds arbitrarily.
 	/// </summary>
 	public static class SoundPlayerSystem {
 
@@ -37,17 +37,17 @@ namespace AvatarStatExtender.Tools {
 		/// <returns></returns>
 		public static GameObject PlaySound(Transform on, AudioClip sound, float volume = 1.0f, float pitch = 1.0f, bool playAs2D = false, SoundFlags flags = SoundFlags.FollowEmitter | SoundFlags.RealtimePitchShift, AudioMixerGroup? mixer = null) {
 			Log.Trace($"Playing sound: {sound.name}...");
-			GameObject obj = new GameObject();
+			GameObject soundObj = new GameObject();
 			if (on == null) {
 				on = Camera.main.gameObject.transform;
 			}
 
-			obj.transform.parent = on;
-			obj.transform.localPosition = Vector3.zero;
+			soundObj.transform.parent = on;
+			soundObj.transform.localPosition = Vector3.zero;
 
 
-			bool doPitchShifting = flags.HasFlag(SoundFlags.PitchShift);
 			bool doRTPitchShifting = flags.HasFlag(SoundFlags.RealtimePitchShift);
+			bool doPitchShifting = doRTPitchShifting || flags.HasFlag(SoundFlags.PitchShift);
 			bool followParent = flags.HasFlag(SoundFlags.FollowEmitter);
 
 			float pitchMod = pitch;
@@ -55,7 +55,7 @@ namespace AvatarStatExtender.Tools {
 				pitchMod *= Time.timeScale;
 			}
 
-			AudioSource audio = obj.AddComponent<AudioSource>();
+			AudioSource audio = soundObj.AddComponent<AudioSource>();
 			audio.outputAudioMixerGroup = mixer ? mixer : Audio.SFXMixer;
 			audio.volume = volume;
 			audio.pitch = pitchMod;
@@ -66,11 +66,12 @@ namespace AvatarStatExtender.Tools {
 			audio.Play();
 
 			if (!doRTPitchShifting && !followParent) {
-				UnityEngine.Object.Destroy(obj, sound.length + 0.2f); // Just destroy at the default time, plus some buffer room.
+				UnityEngine.Object.Destroy(soundObj, sound.length + 0.2f); // Just destroy at the default time, plus some buffer room.
 			} else {
 				RealtimeSoundDriver.StartDriving(audio, followParent, doRTPitchShifting);
 			}
-			return obj;
+			soundObj.name = sound.name;
+			return soundObj;
 		}
 
 		/// <summary>
@@ -99,8 +100,8 @@ namespace AvatarStatExtender.Tools {
 			SoundFlags flags = sound.playTechnique;
 			AudioMixerGroup? mixer = sound.mixer;
 
-			bool doPitchShifting = flags.HasFlag(SoundFlags.PitchShift);
 			bool doRTPitchShifting = flags.HasFlag(SoundFlags.RealtimePitchShift);
+			bool doPitchShifting = doRTPitchShifting || flags.HasFlag(SoundFlags.PitchShift);
 			bool followParent = flags.HasFlag(SoundFlags.FollowEmitter);
 
 			float pitchMod = sound.pitch;
@@ -127,6 +128,7 @@ namespace AvatarStatExtender.Tools {
 			} else {
 				RealtimeSoundDriver.StartDriving(audio, followParent, doRTPitchShifting);
 			}
+			obj.name = audio.clip.name;
 			return obj;
 		}
 
@@ -137,6 +139,7 @@ namespace AvatarStatExtender.Tools {
 		/// <param name="src"></param>
 		/// <param name="isPlayingAs2D"></param>
 		private static void SetupDefaultNearbyCurves(AudioSource src, bool isPlayingAs2D) {
+			src.rolloffMode = AudioRolloffMode.Custom;
 			if (!isPlayingAs2D) {
 				// 3D Audio
 				UnhollowerBaseLib.Il2CppStructArray<Keyframe> rolloff = new UnhollowerBaseLib.Il2CppStructArray<Keyframe>(3);
@@ -188,33 +191,6 @@ namespace AvatarStatExtender.Tools {
 			destination.SetCustomCurve(AudioSourceCurveType.ReverbZoneMix, destination.GetCustomCurve(AudioSourceCurveType.ReverbZoneMix));
 		}
 
-		/// <summary>
-		/// Controls how a sound is played.
-		/// </summary>
-		[Flags]
-		public enum SoundFlags {
-
-			/// <summary>
-			/// No unique behaviors.
-			/// </summary>
-			None = 0,
-
-			/// <summary>
-			/// This sound must follow the object that it emits at. If not defined, the sound will "float" where it is emitted and never move.
-			/// </summary>
-			FollowEmitter = 1 << 0,
-
-			/// <summary>
-			/// This sound shifts its pitch with the game's timescale upon creation. See also: <see cref="RealtimePitchShift"/>
-			/// </summary>
-			PitchShift = 1 << 1,
-
-			/// <summary>
-			/// This sound shifts its pitch with in-game timescaling in real time, rather than finding the timescale on creation and keeping that pitch (which
-			/// sounds in game do by default).
-			/// </summary>
-			RealtimePitchShift = PitchShift | (1 << 2),
-
-		}
+		
 	}
 }

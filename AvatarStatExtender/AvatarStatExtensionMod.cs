@@ -11,7 +11,8 @@ using System.Threading.Tasks;
 using TriangleNet;
 
 namespace AvatarStatExtender {
-	public class AvatarStatExtensionMod : MelonMod {
+
+	internal class AvatarStatExtensionMod : MelonMod {
 
 		public override void OnInitializeMelon() {
 			base.OnInitializeMelon();

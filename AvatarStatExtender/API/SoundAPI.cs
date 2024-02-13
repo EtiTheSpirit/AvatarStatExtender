@@ -26,8 +26,8 @@ namespace AvatarStatExtender.API {
 				new PlayableSoundData(
 					group,
 					UnityEngine.Random.RandomRangeInt(0, group.Sounds.Count - 1),
-					SoundPlayerSystem.SoundFlags.FollowEmitter | SoundPlayerSystem.SoundFlags.RealtimePitchShift,
-					null
+					group.SoundFlags,
+					group.Mixer.GetMixerForTarget()
 				)
 			};
 		};
@@ -40,8 +40,8 @@ namespace AvatarStatExtender.API {
 				sound, 
 				group.Volume, 
 				group.PitchRange,
-				SoundPlayerSystem.SoundFlags.FollowEmitter | SoundPlayerSystem.SoundFlags.RealtimePitchShift,
-				null
+				group.SoundFlags,
+				group.Mixer.GetMixerForTarget()
 			)).ToArray();
 		};
 
@@ -52,9 +52,12 @@ namespace AvatarStatExtender.API {
 		/// components that are in the current scene, which in turn will request their sounds are played.
 		/// While you cannot pass in <see cref="AudioEventType"/>, you <em>can</em> manually enter the
 		/// names of a vanilla event (but this is discouraged, hence why the enum is not an available parameter.
+		/// <para/>
+		/// Returns an array of all of the <see cref="GameObject"/>s that were created to play the sound effects.
+		/// Each object is given the name of its <see cref="AudioClip"/>.
 		/// </summary>
 		/// <param name="names"></param>
-		public static void BroadcastSoundEvent(string name, params SLZAvatar[] toAvatars) {
+		public static IList<GameObject> BroadcastSoundEvent(string name, params SLZAvatar[] toAvatars) {
 			if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
 			if (!SoundBlockNameSanitizer.IsSane(name)) throw new ArgumentOutOfRangeException(nameof(name), "Only one name is allowed, not a list. Names must be all lowercase, and contain only alphanumeric characters, periods, dashes, or underscores. Names may also have a single colon (:) splitting the name, for namespace:sound.");
 
@@ -63,30 +66,38 @@ namespace AvatarStatExtender.API {
 				resolvedName = null;
 			}
 
+			List<GameObject> result = new List<GameObject>();
 			IEnumerable<SLZAvatar> avatars = (toAvatars != null && toAvatars.Length > 0 && toAvatars.Any(avy => avy != null)) ? toAvatars : PlayerObjectExtensions.GetAllActiveAvatars();
 			foreach (SLZAvatar avatarEarly in avatars) {
 				if (avatarEarly == null) continue;
 				AvatarAndPrefabPair avatar = new AvatarAndPrefabPair(avatarEarly);
 				IEnumerable<ReadOnlyAudioEntry> entries = resolvedName == null ? Array.Empty<ReadOnlyAudioEntry>() : AudioCache.GetMatchingSoundsFromAvatarSingle(avatar.prefab, resolvedName);
-				BroadcastEntriesOf(avatar, entries, type, resolvedName);
+				IEnumerable<GameObject> emittedSounds = BroadcastEntriesOf(avatar.prefab, avatar.clone, entries, type, resolvedName);
+				result.AddRange(emittedSounds);
 			}
+			return result;
 		}
 
 		/// <summary>
 		/// Internal method to send vanilla events out.
 		/// </summary>
 		/// <param name="builtInEvents"></param>
-		internal static void BroadcastBuiltInSoundEvent(AudioEventType builtInEvents, params SLZAvatar[] toAvatars) {
-			if (builtInEvents == AudioEventType.Custom) return;
-			if ((builtInEvents & (builtInEvents - 1)) != 0) throw new ArgumentOutOfRangeException(nameof(builtInEvents), "Only one flag can be set at a time.");
+		internal static IList<GameObject> BroadcastBuiltInSoundEvent(AudioEventType builtInEvents, params SLZAvatar[] toAvatars) {
+			if (builtInEvents != AudioEventType.Custom) {
+				if ((builtInEvents & (builtInEvents - 1)) != 0) throw new ArgumentOutOfRangeException(nameof(builtInEvents), "Only one flag can be set at a time.");
 
-			IEnumerable<SLZAvatar> avatars = (toAvatars != null && toAvatars.Length > 0 && toAvatars.Any(avy => avy != null)) ? toAvatars : PlayerObjectExtensions.GetAllActiveAvatars();
-			foreach (SLZAvatar avatarEarly in avatars) {
-				if (avatarEarly == null) continue;
-				AvatarAndPrefabPair avatar = new AvatarAndPrefabPair(avatarEarly);
-				IEnumerable<ReadOnlyAudioEntry> entries = AudioCache.GetMatchingSoundsFromAvatarSingle(avatar.prefab, builtInEvents);
-				BroadcastEntriesOf(avatar, entries, builtInEvents, null);
+				List<GameObject> result = new List<GameObject>();
+				IEnumerable<SLZAvatar> avatars = (toAvatars != null && toAvatars.Length > 0 && toAvatars.Any(avy => avy != null)) ? toAvatars : PlayerObjectExtensions.GetAllActiveAvatars();
+				foreach (SLZAvatar avatarEarly in avatars) {
+					if (avatarEarly == null) continue;
+					AvatarAndPrefabPair avatar = new AvatarAndPrefabPair(avatarEarly);
+					IEnumerable<ReadOnlyAudioEntry> entries = AudioCache.GetMatchingSoundsFromAvatarSingle(avatar.prefab, builtInEvents);
+					IEnumerable<GameObject> emittedSounds = BroadcastEntriesOf(avatar.prefab, avatar.clone, entries, builtInEvents, null);
+					result.AddRange(emittedSounds);
+				}
+				return result;
 			}
+			return (IList<GameObject>)ListTools.EmptyReadOnly<GameObject>();
 		}
 
 		/// <summary>
@@ -94,8 +105,8 @@ namespace AvatarStatExtender.API {
 		/// </summary>
 		/// <param name="avatar"></param>
 		/// <param name="entries"></param>
-		private static void BroadcastEntriesOf(AvatarAndPrefabPair avatar, IEnumerable<ReadOnlyAudioEntry> entries, AudioEventType vanillaSource, string? customSource) {
-			Log.Trace($"Broadcasting sounds to {avatar.prefab.name} ({vanillaSource}, {customSource})");
+		private static IEnumerable<GameObject> BroadcastEntriesOf(SLZAvatar prefab, SLZAvatar clone, IEnumerable<ReadOnlyAudioEntry> entries, AudioEventType vanillaSource, string? customSource) {
+			Log.Trace($"Broadcasting sounds to {prefab.name} ({vanillaSource}, {customSource})");
 			foreach (ReadOnlyAudioEntry entry in entries) {
 				PlayableSoundData[] sounds = Array.Empty<PlayableSoundData>();
 
@@ -104,45 +115,45 @@ namespace AvatarStatExtender.API {
 					if (!string.IsNullOrWhiteSpace(customPlayType)) {
 						if (_delegates.TryGetValue(customPlayType, out AudioSelectionDelegate selector)) {
 							try {
-								sounds = selector(avatar.clone, customPlayType, vanillaSource, customSource, entry);
+								sounds = selector(clone, customPlayType, vanillaSource, customSource, entry);
 								Log.Trace($"Custom selector picked {sounds.Length} sound(s).");
 							} catch (Exception err) {
-								Log.Error($"A custom sound selector for sound group {entry.Name} (of {avatar.prefab.name}) raised an exception while picking audio.");
+								Log.Error($"A custom sound selector for sound group {entry.Name} (of {prefab.name}) raised an exception while picking audio.");
 								Log.Error(err);
 							}
 						} else {
-							Log.Warn($"Sound group {entry.Name} (of {avatar.prefab.name}) wanted to play a sound with a custom selector, but no such selector '{entry.CustomPlayType}' exists. This sound will be skipped.");
+							Log.Warn($"Sound group {entry.Name} (of {prefab.name}) wanted to play a sound with a custom selector, but no such selector '{entry.CustomPlayType}' exists. This sound will be skipped.");
 						}
 					} else {
-						Log.Warn($"Sound group {entry.Name} (of {avatar.prefab.name}) wanted to play a sound with a custom selector, but its selector string was null or whitespace.");
+						Log.Warn($"Sound group {entry.Name} (of {prefab.name}) wanted to play a sound with a custom selector, but its selector string was null or whitespace.");
 					}
 				} else {
 					if (entry.PlayType == AudioPlayType.Random) {
 						Log.Trace("Choosing one random sound.");
-						sounds = PLAYTYPE_DEFAULT_RANDOM(avatar.clone, "Internal Random Selector", vanillaSource, customSource, entry);
+						sounds = PLAYTYPE_DEFAULT_RANDOM(clone, "Internal Random Selector", vanillaSource, customSource, entry);
 					} else if (entry.PlayType == AudioPlayType.AllTogether) {
 						Log.Trace("Choosing all sounds.");
-						sounds = PLAYTYPE_DEFAULT_ALL(avatar.clone, "Internal All Selector", vanillaSource, customSource, entry);
+						sounds = PLAYTYPE_DEFAULT_ALL(clone, "Internal All Selector", vanillaSource, customSource, entry);
 					} else {
-						Log.Warn($"Sound group {entry.Name} (of {avatar.prefab.name}) wanted to play a sound with a built-in selector, but the index of the selector ({entry.PlayType:X8}) was undefined. This sound will be skipped.");
+						Log.Warn($"Sound group {entry.Name} (of {prefab.name}) wanted to play a sound with a built-in selector, but the index of the selector ({entry.PlayType:X8}) was undefined. This sound will be skipped.");
 					}
 				}
 
-				RigManager? mgr = avatar.clone.GetRigManager();
+				RigManager? mgr = clone.GetRigManager();
 				if (mgr == null) {
-					Log.Error($"Avatar {avatar.clone} has no rig manager? Failed to play sound.");
+					Log.Error($"Avatar {clone} has no rig manager? Failed to play sound.");
 					continue;
 				}
 
 				RealtimeSkeletonRig realHepta = mgr.realHeptaRig;
 				if (realHepta == null) {
-					Log.Error($"Avatar {avatar.clone} has no real hepta rig? Failed to play sound.");
+					Log.Error($"Avatar {clone} has no real hepta rig? Failed to play sound.");
 					continue;
 				}
 
 				Transform chest = realHepta.m_chest;
 				if (chest == null) {
-					Log.Error($"Avatar {avatar.clone} has no chest set in its real hepta rig? Failed to play sound.");
+					Log.Error($"Avatar {clone} has no chest set in its real hepta rig? Failed to play sound.");
 					continue;
 				}
 
@@ -150,10 +161,11 @@ namespace AvatarStatExtender.API {
 				for (int i = 0; i < sounds.Length; i++) {
 					PlayableSoundData sound = sounds[i];
 					if (sound.sound == null) {
-						Log.Error($"A playable sound clip's sound was missing for entry {entry.Name} (on avatar {avatar.prefab.name}); was it returned as null? Was it garbage collected on the il2cpp side?");
+						Log.Error($"A playable sound clip's sound was missing for entry {entry.Name} (on avatar {prefab.name}); was it returned as null? Was it garbage collected on the il2cpp side?");
 						continue;
 					}
-					SoundPlayerSystem.PlaySound(chest, sound, entry.OverrideTemplateAudioSource);
+					sound.mixer ??= AudioMixerTargetExt.GetMixerForTarget(entry.Mixer);
+					yield return SoundPlayerSystem.PlaySound(chest, sound, entry.OverrideTemplateAudioSource);
 				}
 			}
 		}

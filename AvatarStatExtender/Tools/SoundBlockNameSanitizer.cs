@@ -8,6 +8,10 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace AvatarStatExtender.Tools {
+
+	/// <summary>
+	/// Verifies and sanitizes the names of custom sound events.
+	/// </summary>
 	public static class SoundBlockNameSanitizer {
 
 		private static readonly char[] SEMICOLON = { ';' };
@@ -68,7 +72,7 @@ namespace AvatarStatExtender.Tools {
 		/// You can use <see href="https://regexr.com"/> to explain the regex (see <see cref="SOUND_REGEX"/>) to you. If you are in a future
 		/// where <see href="https://regexr.com"/> no longer exists, God help you.
 		/// </summary>
-		/// <param name="unfiltered"></param>
+		/// <param name="names"></param>
 		/// <returns></returns>
 		public static string[] GetSanitizedEventList(string[] names) {
 			if (names.Length == 0) return Array.Empty<string>();

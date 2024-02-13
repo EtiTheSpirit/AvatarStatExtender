@@ -1,4 +1,5 @@
-﻿using BoneLib;
+﻿#nullable enable
+using BoneLib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,6 @@ using XansTools.AvatarInteroperability;
 using SLZAvatar = SLZ.VRMK.Avatar;
 using static PlayerDamageReceiver;
 using XansTools.Data;
-#nullable enable
 using SLZ.Marrow.Data;
 using AvatarStatExtender.API;
 using AvatarStatExtender.Data;
@@ -18,7 +18,7 @@ using HarmonyLib;
 using AvatarStatExtender.Tools.Assets;
 
 namespace AvatarStatExtender.BuiltInEvents {
-	public static class SoundBroadcastMarshaller {
+	internal static class SoundBroadcastMarshaller {
 
 		internal static void Initialize() {
 			Log.Info("Initializing the sound broadcast marshaller.");

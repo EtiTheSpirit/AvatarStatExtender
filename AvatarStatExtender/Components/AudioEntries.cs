@@ -1,5 +1,4 @@
-﻿#nullable enable
-using SLZ.Data;
+﻿using SLZ.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -88,12 +87,14 @@ namespace AvatarStatExtender.Data {
 			AudioClip[] sounds = variance.Clips.ToArray();
 			AudioPlayType playType = container.playTypes[index];
 			AudioEventType eventType = container.eventTypes[index];
-			string? customPlayType = container.customPlayTypes[index];
-			string? customEventTypes = container.customEventTypes[index];
+			string customPlayType = container.customPlayTypes[index];
+			string customEventTypes = container.customEventTypes[index];
 			Vector2 pitchRange = container.pitchRanges[index];
 			float volume = container.volumes[index];
-			AudioSource? templateSource = container.templateSources[index];
-			return new AudioEntry(name, playType, customPlayType, eventType, customEventTypes, sounds.ToList(), pitchRange, volume, templateSource);
+			AudioMixerTarget mixerTarget = container.mixers[index];
+			SoundFlags sndFlags = container.soundFlags[index];
+			AudioSource templateSource = container.templateSources[index];
+			return new AudioEntry(name, playType, customPlayType, eventType, customEventTypes, sounds.ToList(), pitchRange, volume, mixerTarget, sndFlags, templateSource);
 		}
 
 		/// <summary>
@@ -114,6 +115,8 @@ namespace AvatarStatExtender.Data {
 			Array.Resize(ref container.customEventTypes, length);
 			Array.Resize(ref container.pitchRanges, length);
 			Array.Resize(ref container.volumes, length);
+			Array.Resize(ref container.mixers, length);
+			Array.Resize(ref container.soundFlags, length);
 			Array.Resize(ref container.templateSources, length);
 			for (int index = 0; index < length; index++) {
 				OverwriteFromEntry(container, entries[index], index, true);
@@ -140,6 +143,8 @@ namespace AvatarStatExtender.Data {
 			container.customEventTypes[index] = entry.CustomEventTypes;
 			container.pitchRanges[index] = entry.PitchRange;
 			container.volumes[index] = entry.Volume;
+			container.mixers[index] = entry.Mixer;
+			container.soundFlags[index] = entry.SoundFlags;
 			container.templateSources[index] = entry.OverrideTemplateAudioSource;
 		}
 

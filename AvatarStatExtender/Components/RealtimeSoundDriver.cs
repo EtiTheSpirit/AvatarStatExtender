@@ -17,11 +17,26 @@ namespace AvatarStatExtender.Components {
 	[RegisterTypeInIl2Cpp]
 	public sealed class RealtimeSoundDriver : MonoBehaviour {
 
+		/// <summary>
+		/// Internal constructor for il2cpp. This creates a managed representation of a Unity object
+		/// being stored in unmanaged memory via the provided pointer.
+		/// </summary>
+		/// <param name="this">The location of the unmanaged object that this represents.</param>
 		public RealtimeSoundDriver(IntPtr @this) : base(@this) { }
 
 		[AllowNull]
 		private AudioSource _src;
+		private float _originalPitch = 1f;
+
+		/// <summary>
+		/// If true, this sound will match its pitch to the timescale in real time.
+		/// </summary>
 		public bool pitchShiftInRealtime = false;
+
+		/// <summary>
+		/// If true, this sound will update its transform to be at its parent transform, 
+		/// plus the <see cref="LocalOffset"/> and <see cref="GlobalOffset"/>
+		/// </summary>
 		public bool followParent = false;
 
 		/// <summary>
@@ -64,6 +79,7 @@ namespace AvatarStatExtender.Components {
 
 		private void Start() {
 			_src = GetComponent<AudioSource>();
+			_originalPitch = _src.pitch;
 		}
 
 		private void Update() {
@@ -88,7 +104,7 @@ namespace AvatarStatExtender.Components {
 				}
 			}
 			if (pitchShiftInRealtime) {
-				_src.pitch = Time.timeScale;
+				_src.pitch = _originalPitch * Time.timeScale;
 			}
 
 		}

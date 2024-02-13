@@ -13,21 +13,39 @@ namespace AvatarStatExtender.API {
 
 	/// <summary>
 	/// Contains an <see cref="AudioClip"/>, a <see cref="pitch"/>, a <see cref="volume"/>, and 
-	/// <see cref="SoundPlayerSystem.SoundFlags"/> to determine how it behaves in the world while playing.
+	/// <see cref="SoundFlags"/> to determine how it behaves in the world while playing.
 	/// </summary>
-	public readonly struct PlayableSoundData {
+	public struct PlayableSoundData {
 
-		public const SoundPlayerSystem.SoundFlags DEFAULT_SOUND_FLAGS = SoundPlayerSystem.SoundFlags.FollowEmitter | SoundPlayerSystem.SoundFlags.RealtimePitchShift;
+		/// <summary>
+		/// These sound flags are the default.
+		/// </summary>
+		public const SoundFlags DEFAULT_SOUND_FLAGS = SoundFlags.FollowEmitter | SoundFlags.RealtimePitchShift;
 
-		public readonly AudioClip sound;
+		/// <summary>
+		/// The sound to play.
+		/// </summary>
+		public AudioClip sound;
 
-		public readonly float volume;
+		/// <summary>
+		/// The volume to play the sound with, limited between 0 and 2.
+		/// </summary>
+		public float volume;
 
-		public readonly float pitch;
+		/// <summary>
+		/// The pitch to play the sound with, limited between -1 and 2
+		/// </summary>
+		public float pitch;
 
-		public readonly SoundPlayerSystem.SoundFlags playTechnique;
+		/// <summary>
+		/// Determines how the sound is updated after being spawned in the world.
+		/// </summary>
+		public SoundFlags playTechnique;
 
-		public readonly AudioMixerGroup? mixer;
+		/// <summary>
+		/// The mixer that this sound plays under. If null, it will be treated as the master mixer.
+		/// </summary>
+		public AudioMixerGroup? mixer;
 
 		/// <summary>
 		/// Select a sound from the entry using its provided index. The <see cref="pitch"/> and <see cref="volume"/>
@@ -35,7 +53,9 @@ namespace AvatarStatExtender.API {
 		/// </summary>
 		/// <param name="entry"></param>
 		/// <param name="index"></param>
-		public PlayableSoundData(ReadOnlyAudioEntry entry, int index, SoundPlayerSystem.SoundFlags playTechnique = DEFAULT_SOUND_FLAGS, AudioMixerGroup? mixer = null) {
+		/// <param name="playTechnique"></param>
+		/// <param name="mixer"></param>
+		public PlayableSoundData(ReadOnlyAudioEntry entry, int index, SoundFlags playTechnique = DEFAULT_SOUND_FLAGS, AudioMixerGroup? mixer = null) {
 			sound = entry.Sounds[index];
 			volume = Mathf.Clamp(entry.Volume, 0f, 2f);
 			this.playTechnique = playTechnique;
@@ -58,7 +78,9 @@ namespace AvatarStatExtender.API {
 		/// <param name="sound"></param>
 		/// <param name="volume"></param>
 		/// <param name="pitch"></param>
-		public PlayableSoundData(AudioClip sound, float volume = 0.5f, float pitch = 1f, SoundPlayerSystem.SoundFlags playTechnique = DEFAULT_SOUND_FLAGS, AudioMixerGroup? mixer = null) {
+		/// <param name="playTechnique"></param>
+		/// <param name="mixer"></param>
+		public PlayableSoundData(AudioClip sound, float volume = 0.5f, float pitch = 1f, SoundFlags playTechnique = DEFAULT_SOUND_FLAGS, AudioMixerGroup? mixer = null) {
 			this.sound = sound;
 			this.volume = Mathf.Clamp(volume, 0f, 2f);
 			this.pitch = Mathf.Clamp(pitch, -1f, 2f);
@@ -71,8 +93,10 @@ namespace AvatarStatExtender.API {
 		/// </summary>
 		/// <param name="sound"></param>
 		/// <param name="volume"></param>
-		/// <param name="pitch"></param>
-		public PlayableSoundData(AudioClip sound, float volume, Vector2 randomPitch, SoundPlayerSystem.SoundFlags playTechnique = DEFAULT_SOUND_FLAGS, AudioMixerGroup? mixer = null) {
+		/// <param name="randomPitch"></param>
+		/// <param name="playTechnique"></param>
+		/// <param name="mixer"></param>
+		public PlayableSoundData(AudioClip sound, float volume, Vector2 randomPitch, SoundFlags playTechnique = DEFAULT_SOUND_FLAGS, AudioMixerGroup? mixer = null) {
 			this.sound = sound;
 			this.volume = Mathf.Clamp(volume, 0f, 2f);
 			this.playTechnique = playTechnique;

@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace AvatarStatExtender.Tools {
-	public static class XPlat {
+	internal static class XPlat {
 
 		public const MelonPlatformAttribute.CompatiblePlatforms META_QUEST = (MelonPlatformAttribute.CompatiblePlatforms)3;
 

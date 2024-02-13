@@ -16,6 +16,11 @@ namespace AvatarStatExtender.Components {
 	[RegisterTypeInIl2Cpp]
 	public sealed class JumpTracker : MonoBehaviour {
 
+		/// <summary>
+		/// Internal constructor for il2cpp. This creates a managed representation of a Unity object
+		/// being stored in unmanaged memory via the provided pointer.
+		/// </summary>
+		/// <param name="this">The location of the unmanaged object that this represents.</param>
 		public JumpTracker(IntPtr @this) : base(@this) { }
 
 		private bool _hasPressedJumpButton = false;

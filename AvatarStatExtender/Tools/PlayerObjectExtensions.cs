@@ -49,6 +49,7 @@ namespace AvatarStatExtender.Tools {
 		/// <param name="avatar"></param>
 		/// <returns></returns>
 		public static RigManager? GetRigManager(this SLZAvatar avatar) {
+			if (avatar == null) return null;
 			if (avatar.transform.parent == null) return null;
 			return avatar.transform.parent.GetComponent<RigManager>();
 		}
@@ -92,8 +93,10 @@ namespace AvatarStatExtender.Tools {
 		/// <param name="avatar"></param>
 		/// <returns></returns>
 		public static Player_Health? GetHealth(this SLZAvatar avatar) {
+			if (avatar == null) return null;
 			RigManager? mgr = GetRigManager(avatar);
 			if (mgr == null) return null;
+			if (mgr.health == null) return null;
 			return mgr.health.Cast<Player_Health>();
 		}
 

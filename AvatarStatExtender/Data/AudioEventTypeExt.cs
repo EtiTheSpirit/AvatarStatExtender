@@ -7,6 +7,10 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace AvatarStatExtender.Data {
+
+	/// <summary>
+	/// Provides utilities for the <see cref="AudioEventType"/> enum.
+	/// </summary>
 	public static class AudioEventTypeExt {
 
 		/// <summary>

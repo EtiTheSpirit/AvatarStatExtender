@@ -58,7 +58,8 @@ namespace AvatarStatExtender.Tools {
 			public bool Contains(T item) => false;
 
 			public void CopyTo(T[] array, int arrayIndex) {
-				if (arrayIndex >= array.Length) throw new ArgumentOutOfRangeException();
+				if (array == null) throw new ArgumentNullException(nameof(array));
+				if (arrayIndex >= array.Length) throw new ArgumentOutOfRangeException(nameof(arrayIndex));
 				// That's literally it.
 			}
 

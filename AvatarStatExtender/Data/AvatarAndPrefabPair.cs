@@ -14,10 +14,22 @@ namespace AvatarStatExtender.Data {
 	/// </summary>
 	public readonly ref struct AvatarAndPrefabPair {
 
+		/// <summary>
+		/// The original prefab of the avatar, as stored in the crate. This object is kept alive.
+		/// </summary>
 		public readonly SLZAvatar prefab;
 
+		/// <summary>
+		/// The clone of the avatar as it appears in runtime (the player model).
+		/// </summary>
 		public readonly SLZAvatar clone;
 
+		/// <summary>
+		/// Construct a new pair using the already provided prefab and clone.
+		/// </summary>
+		/// <param name="prefab"></param>
+		/// <param name="clone"></param>
+		/// <exception cref="ArgumentException">If the prefab isn't a prefab, or the clone isn't a clone.</exception>
 		public AvatarAndPrefabPair(SLZAvatar prefab, SLZAvatar clone) {
 			if (!prefab.IsPrefabAvatar()) throw new ArgumentException("The provided prefab was not actually a prefab; it seems to be a runtime instance.", nameof(prefab));
 			if (clone.IsPrefabAvatar()) throw new ArgumentException("The provided clone was actually a prefab; it seems to be a stored crate.", nameof(clone));
@@ -25,6 +37,12 @@ namespace AvatarStatExtender.Data {
 			this.clone = clone;
 		}
 
+		/// <summary>
+		/// Construct a new pair using the provided clone. The prefab is located from the clone.
+		/// </summary>
+		/// <param name="clone"></param>
+		/// <exception cref="ArgumentException">The clone is a prefab.</exception>
+		/// <exception cref="NullReferenceException">The prefab was not able to be located.</exception>
 		public AvatarAndPrefabPair(SLZAvatar clone) {
 			if (clone.IsPrefabAvatar()) throw new ArgumentException("The provided clone was actually a prefab; it seems to be a stored crate.", nameof(clone));
 			SLZAvatar? prefab = clone.GetOriginalPrefab();

@@ -12,7 +12,7 @@ namespace AvatarStatExtender.Data {
 	/// <para/>
 	/// Now, there is nothing that says this can't be in the mod anyway, and just have a translator included.
 	/// </summary>
-#if UNITY_EDITOR
+#if UNITY_EDITOR || !IS_MOD_ENVIRONMENT
 	public
 #else
 	internal
@@ -25,7 +25,7 @@ namespace AvatarStatExtender.Data {
 		public string Name { get; set; } = "New Sound Group";
 
 		/// <summary>
-		/// If true, use <see cref="customPlayType"/>
+		/// If true, use <see cref="CustomPlayType"/>
 		/// </summary>
 		public bool UseCustomPlayType => PlayType == AudioPlayType.Custom;
 
@@ -75,6 +75,16 @@ namespace AvatarStatExtender.Data {
 		public float Volume { get; set; } = 0.5f;
 
 		/// <summary>
+		/// The mixer that this should use when playing.
+		/// </summary>
+		public AudioMixerTarget Mixer { get; set; } = AudioMixerTarget.SFX;
+
+		/// <summary>
+		/// How this should should be updated when playing.
+		/// </summary>
+		public SoundFlags SoundFlags { get; set; } = SoundFlags.FollowEmitter | SoundFlags.RealtimePitchShift;
+
+		/// <summary>
 		/// If defined, this will override the template audio source used by default when playing sounds.
 		/// </summary>
 		public AudioSource? OverrideTemplateAudioSource { get; set; }
@@ -99,7 +109,7 @@ namespace AvatarStatExtender.Data {
 		/// <param name="customEventTypes"></param>
 		/// <param name="sounds"></param>
 		/// <exception cref="ArgumentNullException"></exception>
-		public AudioEntry(string name, AudioPlayType playType, string? customPlayType, AudioEventType eventType, string? customEventTypes, List<AudioClip> sounds, Vector2 pitchRange, float volume, AudioSource? overrideTemplateAudioSrc) {
+		public AudioEntry(string name, AudioPlayType playType, string? customPlayType, AudioEventType eventType, string? customEventTypes, List<AudioClip> sounds, Vector2 pitchRange, float volume, AudioMixerTarget mixerTarget, SoundFlags soundFlags, AudioSource overrideTemplateAudioSrc) {
 			Name = name ?? throw new ArgumentNullException(nameof(name));
 			PlayType = playType;
 			CustomPlayType = customPlayType;
@@ -108,6 +118,8 @@ namespace AvatarStatExtender.Data {
 			Sounds = sounds ?? throw new ArgumentNullException(nameof(sounds));
 			PitchRange = pitchRange;
 			Volume = volume;
+			Mixer = mixerTarget;
+			SoundFlags = soundFlags;
 			OverrideTemplateAudioSource = overrideTemplateAudioSrc;
 		}
 

@@ -385,14 +385,45 @@ namespace AvatarStatExtender.Tools {
 		/// </summary>
 		public struct AvatarMasses {
 
+			/// <summary>
+			/// The total mass of the avatar.
+			/// </summary>
 			public float massTotal;
+
+			/// <summary>
+			/// The mass of the avatar's lower torso.
+			/// </summary>
 			public float massPelvis;
+
+			/// <summary>
+			/// The mass of the avatar's upper torso.
+			/// </summary>
 			public float massChest;
+
+			/// <summary>
+			/// The mass of one arm on this avatar.
+			/// </summary>
 			public float massArm;
+
+			/// <summary>
+			/// The mass of one leg on this avatar.
+			/// </summary>
 			public float massLeg;
+
+			/// <summary>
+			/// The mass of the entire body, excluding the head.
+			/// </summary>
 			public float massBody;
+
+			/// <summary>
+			/// The mass of this avatar's head.
+			/// </summary>
 			public float massHead;
 
+			/// <summary>
+			/// Outputs all masses in a clean string format.
+			/// </summary>
+			/// <returns></returns>
 			public override string ToString() {
 				return $"Masses[Total={massTotal}kg, [Head={massHead}kg, Chest={massChest}kg, Pelvis={massPelvis}kg, One Arm={massArm}kg, One Leg={massLeg}]]";
 			}
@@ -404,17 +435,47 @@ namespace AvatarStatExtender.Tools {
 		/// </summary>
 		public struct AvatarStats {
 
+			/// <summary>
+			/// This avatar's ability to accelerate or decelerate.
+			/// </summary>
 			public float agility;
+
+			/// <summary>
+			/// The maximum run speed of this avatar in meters per second.
+			/// </summary>
 			public float speed;
+
+			/// <summary>
+			/// The upper body strength of this avatar. Measured in an arbitrary unit.
+			/// </summary>
 			public float strengthUpper;
+
+			/// <summary>
+			/// The lower body strength of this avatar. Measured in an arbitrary unit.
+			/// </summary>
 			public float strengthLower;
 
+			/// <summary>
+			/// The grip strength of the avatar. Where this is used is not entirely known as it is distinctly separate
+			/// from the upper body strength.
+			/// </summary>
 			[Obsolete("This value is computed lazily; it is very likely wrong. It is strongly advised that you do NOT use this.")]
 			public float strengthGrip;
 
+			/// <summary>
+			/// The avatar's health.
+			/// </summary>
 			public float vitality;
+
+			/// <summary>
+			/// How big your forehead is. Literally. That's what this stat measures. I'm not joking.
+			/// </summary>
 			public float intelligence;
 
+			/// <summary>
+			/// Output these stats to a cleanly formatted string.
+			/// </summary>
+			/// <returns></returns>
 			public override string ToString() {
 				return $"Stats[Agility={agility}Ns, Speed={speed}m/s, Lower Strength={strengthLower}, Upper Strength={strengthUpper}, Grip Strength (Secret)={strengthGrip}, Vitality={vitality}, Intelligence={intelligence}]";
 			}
@@ -425,19 +486,75 @@ namespace AvatarStatExtender.Tools {
 		/// Additional information that is associated with avatars, used during internal computations.
 		/// </summary>
 		public struct AvatarComputationProperties {
+			/// <summary>
+			/// The height of the avatar's eyes relative to the origin of the avatar object.
+			/// </summary>
 			public float eyeHeight;
+
+			/// <summary>
+			/// The height of the T1 spine section.
+			/// </summary>
 			public float t1HeightPercent;
+
+			/// <summary>
+			/// The offset of the sternum relative to the chest bone.
+			/// </summary>
 			public Vector3 sternumOffset;
+
+			/// <summary>
+			/// <see cref="sternumOffset"/> divided by <see cref="eyeHeight"/>.
+			/// </summary>
 			public Vector3 sternumOffsetPercent;
+
+			/// <summary>
+			/// The offset of the hip bones relative to the center point between the two upper leg bones.
+			/// </summary>
 			public Vector3 hipOffset;
+
+			/// <summary>
+			/// <see cref="hipOffset"/> divided by <see cref="eyeHeight"/>
+			/// </summary>
 			public Vector3 hipOffsetPercent;
+
+			/// <summary>
+			/// The position of the hip bone relative to the origin of the avatar.
+			/// </summary>
 			public Vector3 hipsPosition;
+
+			/// <summary>
+			/// i forgor:skull:
+			/// </summary>
 			public float sacrumHeightPercent;
+
+			/// <summary>
+			/// The length of the avatar's upper arm bone. This is specifically sampled from the right arm, and assumes the arms are symmetrical.
+			/// </summary>
 			public float upperArmLength;
+
+			/// <summary>
+			/// The length of the avatar's upper leg bone. This is specifically sampled from the right arm, and assumes the arms are symmetrical.
+			/// </summary>
 			public float upperLegLength;
+
+			/// <summary>
+			/// The length of the avatar's forearm. This is specifically sampled from the right arm, and assumes the arms are symmetrical.
+			/// </summary>
 			public float lowerArmLength;
+
+			/// <summary>
+			/// The length of the avatar's lower leg. This is specifically sampled from the right arm, and assumes the arms are symmetrical.
+			/// </summary>
 			public float lowerLegLength;
+
+			/// <summary>
+			/// The distance from the chest bone to the shoulder bone, divided by <see cref="eyeHeight"/>.
+			/// </summary>
 			public float chestToShoulderPerc;
+
+			/// <summary>
+			/// A factor based on the hand size.
+			/// </summary>
+			[Obsolete("This value is computed lazily; it is very likely wrong. It is strongly advised that you do NOT use this.")]
 			public float handSizeMult;
 		}
 

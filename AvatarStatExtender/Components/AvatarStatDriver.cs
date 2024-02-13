@@ -5,23 +5,31 @@ using UnityEngine;
 using SLZAvatar = SLZ.VRMK.Avatar;
 using System.Diagnostics.CodeAnalysis;
 
-
 #if !UNITY_EDITOR && IS_MOD_ENVIRONMENT
 // As it appears in the mod:
+using AvatarStatExtender.Tools;
 using static AvatarStatExtender.Tools.AvatarStatCalculationExtension;
-#else
-using static AvatarCalculators;
 #endif
 
+/// <summary>
+/// This component is responsible for <em>providing</em> the stats of an avatar when it spawns.
+/// Actually applying these stats is done by the <see cref="StatMarshaller"/>
+/// </summary>
 #if UNITY_EDITOR
 [RequireComponent(typeof(SLZAvatar))]
 #endif
 public class AvatarStatDriver : MonoBehaviour {
 
 #if !UNITY_EDITOR && IS_MOD_ENVIRONMENT
+	/// <summary>
+	/// Internal constructor for il2cpp. This creates a managed representation of a Unity object
+	/// being stored in unmanaged memory via the provided pointer.
+	/// </summary>
+	/// <param name="this">The location of the unmanaged object that this represents.</param>
 	public AvatarStatDriver(IntPtr @this) : base(@this) { }
 #endif
 
+#pragma warning disable CS1591
 	public bool useCustomStats;
 	public bool useCustomMass;
 	public bool useProportionalMassEditing;
@@ -54,6 +62,7 @@ public class AvatarStatDriver : MonoBehaviour {
 	public float customHeadMass;
 
 	public float extraJumpVerticalVelocity;
+#pragma warning restore CS1591
 
 	[AllowNull]
 	private SLZAvatar _avatar;
@@ -182,6 +191,9 @@ public class AvatarStatDriver : MonoBehaviour {
 
 	#region Masses
 
+	/// <summary>
+	/// The avatar's total mass as computed in vanilla, in kilograms.
+	/// </summary>
 	public float VanillaTotalMass {
 		get {
 #if UNITY_EDITOR || AVATAR_STATS_COMPUTABLE_ANYWAY
@@ -194,6 +206,9 @@ public class AvatarStatDriver : MonoBehaviour {
 		}
 	}
 
+	/// <summary>
+	/// The mass of the avatar's upper half of the torso, as computed in vanilla, in kilograms.
+	/// </summary>
 	public float VanillaChestMass {
 		get {
 #if UNITY_EDITOR || AVATAR_STATS_COMPUTABLE_ANYWAY
@@ -206,6 +221,9 @@ public class AvatarStatDriver : MonoBehaviour {
 		}
 	}
 
+	/// <summary>
+	/// The mass of the avatar's lower half of the torso, as computed in vanilla, in kilograms.
+	/// </summary>
 	public float VanillaPelvisMass {
 		get {
 #if UNITY_EDITOR || AVATAR_STATS_COMPUTABLE_ANYWAY
@@ -218,7 +236,9 @@ public class AvatarStatDriver : MonoBehaviour {
 		}
 	}
 
-
+	/// <summary>
+	/// The mass of a single arm on this avatar, in kilograms.
+	/// </summary>
 	public float VanillaArmMass {
 		get {
 #if UNITY_EDITOR || AVATAR_STATS_COMPUTABLE_ANYWAY
@@ -231,7 +251,9 @@ public class AvatarStatDriver : MonoBehaviour {
 		}
 	}
 
-
+	/// <summary>
+	/// The mass of a single leg on this avatar, in kilograms.
+	/// </summary>
 	public float VanillaLegMass {
 		get {
 #if UNITY_EDITOR || AVATAR_STATS_COMPUTABLE_ANYWAY
@@ -244,7 +266,9 @@ public class AvatarStatDriver : MonoBehaviour {
 		}
 	}
 
-
+	/// <summary>
+	/// The mass of this avatar's head, in kilograms.
+	/// </summary>
 	public float VanillaHeadMass {
 		get {
 #if UNITY_EDITOR || AVATAR_STATS_COMPUTABLE_ANYWAY
@@ -261,6 +285,9 @@ public class AvatarStatDriver : MonoBehaviour {
 
 	#endregion
 
+	/// <summary>
+	/// The final result of what this avatar's agility should be, determined by all settings of this object.
+	/// </summary>
 	public float EffectiveAgility {
 		get {
 			if (useCustomStats && useCustomAgility) {
@@ -270,6 +297,9 @@ public class AvatarStatDriver : MonoBehaviour {
 		}
 	}
 
+	/// <summary>
+	/// The final result of what this avatar's speed should be, determined by all settings of this object.
+	/// </summary>
 	public float EffectiveSpeed {
 		get {
 			if (useCustomStats && useCustomSpeed) {
@@ -279,6 +309,9 @@ public class AvatarStatDriver : MonoBehaviour {
 		}
 	}
 
+	/// <summary>
+	/// The final result of what this avatar's upper body strength should be, determined by all settings of this object.
+	/// </summary>
 	public float EffectiveUpperStrength {
 		get {
 			if (useCustomStats && useCustomUpper) {
@@ -288,6 +321,9 @@ public class AvatarStatDriver : MonoBehaviour {
 		}
 	}
 
+	/// <summary>
+	/// The final result of what this avatar's lower body strength should be, determined by all settings of this object.
+	/// </summary>
 	public float EffectiveLowerStrength {
 		get {
 			if (useCustomStats && useCustomLower) {
@@ -297,6 +333,9 @@ public class AvatarStatDriver : MonoBehaviour {
 		}
 	}
 
+	/// <summary>
+	/// The final result of what this avatar's vitality should be, determined by all settings of this object.
+	/// </summary>
 	public float EffectiveVitality {
 		get {
 			if (useCustomStats && useCustomVitality) {
@@ -306,6 +345,9 @@ public class AvatarStatDriver : MonoBehaviour {
 		}
 	}
 
+	/// <summary>
+	/// The final result of what this avatar's intelligence should be, determined by all settings of this object.
+	/// </summary>
 	public float EffectiveIntelligence {
 		get {
 			if (useCustomStats && useCustomIntelligence) {

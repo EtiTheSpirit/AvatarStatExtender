@@ -102,6 +102,20 @@ public class AvatarExtendedAudioContainer : MonoBehaviour
 	public float[] volumes = Array.Empty<float>();
 
 	/// <summary>
+	/// Which mixer the sound goes into.
+	/// <para/>
+	/// <strong>MODDERS, DO NOT USE THIS.</strong> Use <see cref="GetEntries"/> instead.
+	/// </summary>
+	public AudioMixerTarget[] mixers = Array.Empty<AudioMixerTarget>();
+
+	/// <summary>
+	/// Which sound flags this should play with.
+	/// <para/>
+	/// <strong>MODDERS, DO NOT USE THIS.</strong> Use <see cref="GetEntries"/> instead.
+	/// </summary>
+	public SoundFlags[] soundFlags = Array.Empty<SoundFlags>();
+
+	/// <summary>
 	/// An audio source that will be cloned when playing the applicable sound effects.
 	/// <para/>
 	/// <strong>MODDERS, DO NOT USE THIS.</strong> Use <see cref="GetEntries"/> instead.
@@ -120,6 +134,9 @@ public class AvatarExtendedAudioContainer : MonoBehaviour
 		largest = Math.Max(largest, customEventTypes.Length);
 		largest = Math.Max(largest, customPlayTypes.Length);
 		largest = Math.Max(largest, pitchRanges.Length);
+		largest = Math.Max(largest, volumes.Length);
+		largest = Math.Max(largest, mixers.Length);
+		largest = Math.Max(largest, soundFlags.Length);
 		largest = Math.Max(largest, templateSources.Length);
 		ResizeArrayDefault(ref names, largest, "New Sound Group");
 		ResizeArrayDefault(ref sounds.children, largest, new SerializableAudioArray());
@@ -129,6 +146,8 @@ public class AvatarExtendedAudioContainer : MonoBehaviour
 		ResizeArrayDefault(ref customPlayTypes, largest, null);
 		ResizeArrayDefault(ref pitchRanges, largest, new Vector2(1, 1));
 		ResizeArrayDefault(ref volumes, largest, 0.5f);
+		ResizeArrayDefault(ref mixers, largest, AudioMixerTarget.SFX);
+		ResizeArrayDefault(ref soundFlags, largest, SoundFlags.RealtimePitchShift);
 		ResizeArrayDefault(ref templateSources, largest, null);
 	}
 
@@ -244,6 +263,8 @@ public class AvatarExtendedAudioContainer : MonoBehaviour
 		@this.FindProperty(nameof(lengthsOfEachSegment)).SetArrayValue(lengthsOfEachSegment);
 		@this.FindProperty(nameof(pitchRanges)).SetArrayValue(pitchRanges);
 		@this.FindProperty(nameof(volumes)).SetArrayValue(volumes);
+		@this.FindProperty(nameof(mixers)).SetArrayValue(mixers);
+		@this.FindProperty(nameof(soundFlags)).SetArrayValue(soundFlags);
 		@this.FindProperty(nameof(templateSources)).SetArrayValue(templateSources);
 		EditorUtility.SetDirty(this);
 		PrefabUtility.RecordPrefabInstancePropertyModifications(this);

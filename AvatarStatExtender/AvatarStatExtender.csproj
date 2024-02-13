@@ -26,6 +26,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <NoWarn>IDE0090</NoWarn>
+    <DocumentationFile>bin\Debug\AvatarStatExtender.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -35,6 +36,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <NoWarn>IDE0090</NoWarn>
+    <DocumentationFile>bin\Release\AvatarStatExtender.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="0Harmony">
@@ -127,6 +129,8 @@
     <Compile Include="Data\AudioCache.cs" />
     <Compile Include="Data\AudioEventType.cs" />
     <Compile Include="Data\AudioEventTypeExt.cs" />
+    <Compile Include="Data\AudioMixerTarget.cs" />
+    <Compile Include="Data\AudioMixerTargetExt.cs" />
     <Compile Include="Data\AudioPlayType.cs" />
     <Compile Include="Data\AvatarAndPrefabPair.cs" />
     <Compile Include="Data\FakeInspectorName.cs" />
@@ -141,6 +145,7 @@
     <Compile Include="Tools\Assets\AssetLocator.cs" />
     <Compile Include="Tools\PlayerObjectExtensions.cs" />
     <Compile Include="Tools\AvatarStatCalculationExtension.cs" />
+    <Compile Include="Data\SoundFlags.cs" />
     <Compile Include="Tools\SoundPlayerSystem.cs" />
     <Compile Include="Tools\ReadOnlyHashSet.cs" />
     <Compile Include="Tools\SoundBlockNameSanitizer.cs" />

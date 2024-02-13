@@ -10,17 +10,23 @@ using UnhollowerBaseLib;
 using UnityEngine;
 
 namespace AvatarStatExtender.Data {
+
+	/// <summary>
+	/// A variation of the internal audio entry type that is designed for public use, and is immutable as a result.
+	/// </summary>
 	public sealed class ReadOnlyAudioEntry {
 
 		/// <summary>
-		/// This array keeps the audio clips from being garbage collected on the il2cpp side.
+		/// This array keeps the audio clips from being garbage collected on the il2cpp side (ever).
 		/// <para/>
 		/// Without this, the audio might be GCed anyway because il2cpp has its own separate collector.
 		/// Managed objects serve more as "proxies" to these objects, providing outside access to native memory.
 		/// By storing them in the il2cpp array, a reference is kept on the il2cpp side, preventing garbage collection.
 		/// </summary>
+#pragma warning disable IDE0052
 		private readonly Il2CppReferenceArray<AudioClip> _keepAlive;
 		private readonly Il2CppReferenceArray<AudioSource>? _sourceKeepAlive;
+#pragma warning restore IDE0052
 
 		/// <summary>
 		/// The name of this audio group.
@@ -83,6 +89,17 @@ namespace AvatarStatExtender.Data {
 		public float Volume { get; }
 
 		/// <summary>
+		/// The mixer that this should use when playing.
+		/// </summary>
+		public AudioMixerTarget Mixer { get; } = AudioMixerTarget.SFX;
+
+		/// <summary>
+		/// How this should should be updated when playing.
+		/// </summary>
+		public SoundFlags SoundFlags { get; } = SoundFlags.FollowEmitter | SoundFlags.RealtimePitchShift;
+
+
+		/// <summary>
 		/// If defined, this will override the template audio source used by default when playing sounds.
 		/// <para/>
 		/// This is a clone of the original template object.
@@ -99,6 +116,15 @@ namespace AvatarStatExtender.Data {
 			PitchRange = real.PitchRange;
 			Volume = real.Volume;
 			OverrideTemplateAudioSource = OverrideTemplateAudioSource ? UnityEngine.Object.Instantiate(OverrideTemplateAudioSource) : null;
+
+			Mixer = real.Mixer;
+
+			SoundFlags soundFlags =real.SoundFlags;
+			if (soundFlags.HasFlag(SoundFlags.RealtimePitchShift)) {
+				soundFlags |= SoundFlags.PitchShift;
+			}
+			SoundFlags = soundFlags;
+			
 
 			SoundBlockNameSanitizer.CreateStringAndEnumMix(CustomEventTypes ?? string.Empty, out string[] customs, out AudioEventType eventType);
 			EventType = eventType | real.EventType;

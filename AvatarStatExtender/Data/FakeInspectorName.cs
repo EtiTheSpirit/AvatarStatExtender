@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace AvatarStatExtender.Data {
 
 	[AttributeUsage(AttributeTargets.Field)]
-	public sealed class InspectorNameAttribute : Attribute {
+	internal sealed class InspectorNameAttribute : Attribute {
 
 		public readonly string name;
 
