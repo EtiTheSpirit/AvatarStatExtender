@@ -1,13 +1,14 @@
 ﻿#nullable enable
 using AvatarStatExtender.Tools.Assets;
-using SLZ.Rig;
+using Il2CppSLZ.Bonelab;
+using Il2CppSLZ.Rig;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
-using SLZAvatar = SLZ.VRMK.Avatar;
+using SLZAvatar = Il2CppSLZ.VRMK.Avatar;
 using UnityObject = UnityEngine.Object;
 
 namespace AvatarStatExtender.Tools {

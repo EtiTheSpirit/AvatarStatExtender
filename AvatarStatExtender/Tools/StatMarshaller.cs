@@ -1,9 +1,8 @@
 ﻿#nullable enable
 using AvatarStatExtender.Components;
-using BoneLib;
 using MelonLoader;
-using SLZ.Rig;
-using SLZ.VRMK;
+using Il2CppSLZ.Rig;
+using Il2CppSLZ.VRMK;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +10,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
-using SLZAvatar = SLZ.VRMK.Avatar;
+using SLZAvatar = Il2CppSLZ.VRMK.Avatar;
 
 namespace AvatarStatExtender.Tools {
 

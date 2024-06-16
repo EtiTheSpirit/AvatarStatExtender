@@ -2,7 +2,7 @@
 #define AVATAR_STATS_COMPUTABLE_ANYWAY
 using System;
 using UnityEngine;
-using SLZAvatar = SLZ.VRMK.Avatar;
+using SLZAvatar = Il2CppSLZ.VRMK.Avatar;
 using System.Diagnostics.CodeAnalysis;
 
 #if !UNITY_EDITOR && IS_MOD_ENVIRONMENT
@@ -21,12 +21,12 @@ using static AvatarStatExtender.Tools.AvatarStatCalculationExtension;
 public class AvatarStatDriver : MonoBehaviour {
 
 #if !UNITY_EDITOR && IS_MOD_ENVIRONMENT
-	/// <summary>
-	/// Internal constructor for il2cpp. This creates a managed representation of a Unity object
-	/// being stored in unmanaged memory via the provided pointer.
-	/// </summary>
-	/// <param name="this">The location of the unmanaged object that this represents.</param>
-	public AvatarStatDriver(IntPtr @this) : base(@this) { }
+	// <summary>
+	// Internal constructor for il2cpp. This creates a managed representation of a Unity object
+	// being stored in unmanaged memory via the provided pointer.
+	// </summary>
+	// <param name="this">The location of the unmanaged object that this represents.</param>
+	// public AvatarStatDriver(IntPtr @this) : base(@this) { }
 #endif
 
 #pragma warning disable CS1591

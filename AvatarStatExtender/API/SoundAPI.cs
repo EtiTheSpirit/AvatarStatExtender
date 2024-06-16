@@ -1,7 +1,7 @@
 ﻿#nullable enable
 using AvatarStatExtender.Data;
 using AvatarStatExtender.Tools;
-using SLZ.Rig;
+using Il2CppSLZ.Rig;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +9,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
-using SLZAvatar = SLZ.VRMK.Avatar;
+using SLZAvatar = Il2CppSLZ.VRMK.Avatar;
 
 namespace AvatarStatExtender.API {
 
@@ -145,7 +145,7 @@ namespace AvatarStatExtender.API {
 					continue;
 				}
 
-				RealtimeSkeletonRig realHepta = mgr.realHeptaRig;
+				GameWorldSkeletonRig realHepta = mgr.virtualHeptaRig;
 				if (realHepta == null) {
 					Log.Error($"Avatar {clone} has no real hepta rig? Failed to play sound.");
 					continue;

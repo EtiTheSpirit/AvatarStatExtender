@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
-using SLZAvatar = SLZ.VRMK.Avatar;
+using SLZAvatar = Il2CppSLZ.VRMK.Avatar;
 
 namespace AvatarStatExtender.Components {
 

@@ -1,21 +1,20 @@
 ﻿#nullable enable
-using BoneLib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using XansTools.AvatarInteroperability;
-using SLZAvatar = SLZ.VRMK.Avatar;
-using static PlayerDamageReceiver;
+using SLZAvatar = Il2CppSLZ.VRMK.Avatar;
+using static Il2CppSLZ.Player.PlayerDamageReceiver;
 using XansTools.Data;
-using SLZ.Marrow.Data;
+using Il2CppSLZ.Marrow.Data;
 using AvatarStatExtender.API;
 using AvatarStatExtender.Data;
 using AvatarStatExtender.Tools;
-using SLZ.Rig;
 using HarmonyLib;
 using AvatarStatExtender.Tools.Assets;
+using Il2CppSLZ.Bonelab;
 
 namespace AvatarStatExtender.BuiltInEvents {
 	internal static class SoundBroadcastMarshaller {

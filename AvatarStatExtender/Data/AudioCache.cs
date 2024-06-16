@@ -1,7 +1,7 @@
 ﻿#nullable enable
 using AvatarStatExtender.Tools;
 using AvatarStatExtender.Tools.Assets;
-using SLZ.VRMK;
+using Il2CppSLZ.VRMK;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
-using SLZAvatar = SLZ.VRMK.Avatar;
+using SLZAvatar = Il2CppSLZ.VRMK.Avatar;
 
 namespace AvatarStatExtender.Data {
 
@@ -67,7 +67,7 @@ namespace AvatarStatExtender.Data {
 		/// The same as <see cref="GetAllSoundsOfAvatar(SLZAvatar)"/> but this assumes that the caller guarantees
 		/// the incoming avatar is the prefab instance.
 		/// </summary>
-		/// <param name="original"></param>
+		/// <param name="originalAvy"></param>
 		/// <returns></returns>
 		private static ISet<ReadOnlyAudioEntry> GetAllSoundsOfAvatarPrefab(SLZAvatar originalAvy) {
 			if (!originalAvy.IsPrefabAvatar()) throw new ArgumentException($"The avatar that called this method was not a prefab ({originalAvy.name})");
@@ -119,7 +119,7 @@ namespace AvatarStatExtender.Data {
 		/// <summary>
 		/// Collects all of the sound groups relevant to this single custom event. Note that this does not propagate vanilla event type names.
 		/// </summary>
-		/// <param name="onAvatarObj"></param>
+		/// <param name="prefab"></param>
 		/// <param name="singleCustomEventType"></param>
 		/// <returns></returns>
 		internal static IEnumerable<ReadOnlyAudioEntry> GetMatchingSoundsFromAvatarSingle(SLZAvatar prefab, string singleCustomEventType) {
@@ -138,7 +138,7 @@ namespace AvatarStatExtender.Data {
 		/// <summary>
 		/// Collects all of the sound groups relevant to this single event. Note that this does not propagate vanilla event types.
 		/// </summary>
-		/// <param name="onAvatarObj"></param>
+		/// <param name="prefab"></param>
 		/// <param name="singleEventType"></param>
 		/// <returns></returns>
 		internal static IEnumerable<ReadOnlyAudioEntry> GetMatchingSoundsFromAvatarSingle(SLZAvatar prefab, AudioEventType singleEventType) {

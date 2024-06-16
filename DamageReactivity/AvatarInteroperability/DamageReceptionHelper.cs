@@ -1,5 +1,6 @@
-﻿using MelonLoader;
-using SLZ.Combat;
+﻿using Il2CppSLZ.Bonelab;
+using Il2CppSLZ.Player;
+using MelonLoader;
 using System;
 using System.Collections.Generic;
 using System.Linq;

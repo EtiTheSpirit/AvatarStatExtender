@@ -2,10 +2,9 @@
 using AvatarStatExtender.API;
 using AvatarStatExtender.Components;
 using AvatarStatExtender.Data;
-using BoneLib;
-using SLZ.Data;
-using SLZ.Marrow.Interaction;
-using SLZ.SaveData;
+using Il2CppInterop.Runtime.InteropTypes.Arrays;
+using Il2CppSLZ.Data;
+using Il2CppSLZ.Marrow.Interaction;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -142,22 +141,22 @@ namespace AvatarStatExtender.Tools {
 			src.rolloffMode = AudioRolloffMode.Custom;
 			if (!isPlayingAs2D) {
 				// 3D Audio
-				UnhollowerBaseLib.Il2CppStructArray<Keyframe> rolloff = new UnhollowerBaseLib.Il2CppStructArray<Keyframe>(3);
+				Il2CppStructArray<Keyframe> rolloff = new Il2CppStructArray<Keyframe>(3);
 				rolloff[0] = new Keyframe(0.1f, 1f, 0f, 0f, 0.3333333f, 0.3333333f);
 				rolloff[1] = new Keyframe(0.3540465f, 0.2750549f, -1.329637f, -1.329637f, 0.3333333f, 0.3333333f);
 				rolloff[2] = new Keyframe(1f, 0f, -0.1762998f, -0.1762998f, 0.3204496f, 0.3333333f);
 
-				UnhollowerBaseLib.Il2CppStructArray<Keyframe> spread = new UnhollowerBaseLib.Il2CppStructArray<Keyframe>(2);
+				Il2CppStructArray<Keyframe> spread = new Il2CppStructArray<Keyframe>(2);
 				spread[0] = new Keyframe(0f, 0.5f, -0.3094383f, -0.3094383f, 0.4783377f, 0f);
 				spread[1] = new Keyframe(1f, 0f, 0f, 0f, 0.3333333f, 0.3333333f);
 
-				UnhollowerBaseLib.Il2CppStructArray<Keyframe> spatialBlend = new UnhollowerBaseLib.Il2CppStructArray<Keyframe>(4);
+				Il2CppStructArray<Keyframe> spatialBlend = new Il2CppStructArray<Keyframe>(4);
 				spatialBlend[0] = new Keyframe(0f, 0f, 0f, 0f, 0.3333333f, 0.3333333f);
 				spatialBlend[1] = new Keyframe(0.1896423f, 0.8151474f, 1.837119f, 1.837119f, 0.07648899f, 0.07007767f);
 				spatialBlend[2] = new Keyframe(0.4214395f, 0.9818153f, 0.1665137f, 0.1665137f, 0.6917831f, 0f);
 				spatialBlend[3] = new Keyframe(1f, 1f, 0f, 0f, 0.3333333f, 0.3333333f);
 
-				UnhollowerBaseLib.Il2CppStructArray<Keyframe> reverbZoneMix = new UnhollowerBaseLib.Il2CppStructArray<Keyframe>(3);
+				Il2CppStructArray<Keyframe> reverbZoneMix = new Il2CppStructArray<Keyframe>(3);
 				reverbZoneMix[0] = new Keyframe(0f, 0f, 0f, 0f, 0.3333333f, 0.3333333f);
 				reverbZoneMix[1] = new Keyframe(0.3287202f, 0.1654926f, 1.535669f, 1.535669f, 0.3333333f, 0.3333333f);
 				reverbZoneMix[2] = new Keyframe(0.4605339f, 1f, 0.04093663f, 0.04093663f, 0.1604803f, 0f);

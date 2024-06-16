@@ -1,12 +1,12 @@
 ﻿#nullable enable
 using AvatarStatExtender.Tools;
+using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using UnhollowerBaseLib;
 using UnityEngine;
 
 namespace AvatarStatExtender.Data {

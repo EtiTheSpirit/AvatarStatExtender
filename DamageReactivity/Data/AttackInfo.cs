@@ -1,6 +1,7 @@
-﻿using SLZ.AI;
-using SLZ.Combat;
-using SLZ.Marrow.Data;
+﻿using Il2CppSLZ.AI;
+using Il2CppSLZ.Combat;
+using Il2CppSLZ.Marrow.Data;
+using Il2CppSLZ.Marrow.AI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using Il2CppSLZ.Marrow.Combat;
 
 namespace XansTools.Data {
 	/// <summary>

@@ -1,8 +1,7 @@
 ﻿#nullable enable
 using AvatarStatExtender.Components;
-using SLZ.Marrow.Pool;
-using SLZ.Marrow.Warehouse;
-using SLZ.Rig;
+using Il2CppSLZ.Marrow.Pool;
+using Il2CppSLZ.Marrow.Warehouse;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using SLZAvatar = SLZ.VRMK.Avatar;
+using SLZAvatar = Il2CppSLZ.VRMK.Avatar;
 
 namespace AvatarStatExtender.Tools.Assets {
 
@@ -58,7 +57,7 @@ namespace AvatarStatExtender.Tools.Assets {
 			// At this point we are genuinely unsure, gotta do it the long way.
 			Log.Trace($"Searching the warehouse for the crate of {avatar.name}...");
 			Animator avyAnim = avatar.GetComponent<Animator>();
-			AvatarCrate[] crates = AssetWarehouse.Instance.GetCrates<AvatarCrate>().ToArray();
+			AvatarCrate[] crates = AssetWarehouse.Instance.GetCrates<AvatarCrate>().ToArray()!;
 			for (int i = 0; i < crates.Length; i++) {
 				AvatarCrate crate = crates[i];
 				if (crate.MainGameObject != null && crate.MainGameObject.Asset is GameObject go && go != null) {

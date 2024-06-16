@@ -1,8 +1,5 @@
 ﻿#nullable enable
 using XansTools.Data;
-using SLZ.AI;
-using SLZ.Combat;
-using SLZ.Marrow.Data;
 using System;
 using System.Runtime.InteropServices;
 using UnityEngine;
@@ -11,6 +8,8 @@ using System.Diagnostics.CodeAnalysis;
 using HarmonyLib;
 using System.Threading;
 using XansTools.AvatarInteroperability;
+using Il2CppSLZ.Bonelab;
+using Il2CppSLZ.Player;
 
 namespace XansTools.Patching {
 

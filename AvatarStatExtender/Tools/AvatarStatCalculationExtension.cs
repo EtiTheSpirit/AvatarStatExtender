@@ -3,11 +3,14 @@
 // #define REAL_HEPTA_AVATAR
 // #define TEST_CHIMERA_ECLIPSE
 using UnityEngine;
-using SLZAvatar = SLZ.VRMK.Avatar;
+using SLZAvatar = Il2CppSLZ.VRMK.Avatar;
 using System;
-using static SLZ.VRMK.Avatar;
 
 namespace AvatarStatExtender.Tools {
+
+	/// <summary>
+	/// Provides extension methods used to calculate the stats of avatars.
+	/// </summary>
 	public static class AvatarStatCalculationExtension {
 
 		private const float PI = 3.141592653582373f;
@@ -45,15 +48,52 @@ namespace AvatarStatExtender.Tools {
 			return avatar.EyePosition().y - avatar.transform.position.y;
 		}
 
+
+		/// <summary>
+		/// Returns whether or not the avatar is in a state where it can be computed.
+		/// <para/>
+		/// This is in line with limitations imposed by Unity, which namely prevents scripts from accessing humanoid bones
+		/// if the animator is disabled. This also performs other sanity checks.
+		/// <para/>
+		/// If this method returns <see langword="false"/>, the <paramref name="errorMessage"/> parameter can be used
+		/// to log appropriately.
+		/// </summary>
+		/// <param name="avatar">The avatar to test.</param>
+		/// <param name="errorMessage">If non-null, this is an error message describing why it cannot be edited.</param>
+		/// <returns></returns>
+		public static bool CanComputeStats(this SLZAvatar avatar, out string? errorMessage) {
+			if (avatar == null) {
+				errorMessage = "The avatar is null.";
+				return false;
+			}
+			if (avatar.animator == null) {
+				errorMessage = "The avatar was not given an Animator, or it was destroyed.";
+				return false;
+			}
+			if (!avatar.animator.gameObject.activeInHierarchy) {
+				errorMessage = "The object that the Animator is a part of is currently not active in the hierarchy, so Unity won't let scripts read its data.";
+				return false;
+			}
+			errorMessage = null;
+			return true;
+		}
+
 		/// <summary>
 		/// Provides the avatar's computed mass and stats.
 		/// </summary>
 		/// <param name="avatar">The avatar to get information on.</param>
 		/// <param name="mass">The masses of every body part on this avatar.</param>
 		/// <param name="stats">The stats computed from the avatar's body.</param>
-		public static void ComputeAllStats(this SLZAvatar avatar, out AvatarMasses mass, out AvatarStats stats) {
-			mass = ComputeMass(avatar, out AvatarComputationProperties additionalInfo);
-			stats = ComputeBaseStats(avatar, mass, additionalInfo);
+		public static bool ComputeAllStats(this SLZAvatar avatar, out AvatarMasses mass, out AvatarStats stats) {
+			if (CanComputeStats(avatar, out _)) {
+				mass = ComputeMass(avatar, out AvatarComputationProperties additionalInfo);
+				stats = ComputeBaseStats(avatar, mass, additionalInfo);
+				return true;
+			} else {
+				mass = default;
+				stats = default;
+				return false;
+			}
 		}
 
 		/// <summary>
@@ -552,7 +592,7 @@ namespace AvatarStatExtender.Tools {
 			public float chestToShoulderPerc;
 
 			/// <summary>
-			/// A factor based on the hand size.
+			/// A factor based on the distance between all fingers, measuring (roughly) an area that represents the hand's size.
 			/// </summary>
 			[Obsolete("This value is computed lazily; it is very likely wrong. It is strongly advised that you do NOT use this.")]
 			public float handSizeMult;

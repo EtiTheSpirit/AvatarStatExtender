@@ -66,7 +66,7 @@ namespace AvatarStatExtender.API {
 			pitchMin = Mathf.Clamp(pitchMin, -1f, 2f);
 			pitchMax = Mathf.Clamp(pitchMax, -1f, 2f);
 			if (pitchMin != pitchMax) {
-				pitch = UnityEngine.Random.RandomRange(pitchMin, pitchMax);
+				pitch = UnityEngine.Random.Range(pitchMin, pitchMax);
 			} else {
 				pitch = pitchMin;
 			}
@@ -107,7 +107,7 @@ namespace AvatarStatExtender.API {
 			pitchMin = Mathf.Clamp(pitchMin, -1f, 2f);
 			pitchMax = Mathf.Clamp(pitchMax, -1f, 2f);
 			if (pitchMin != pitchMax) {
-				pitch = UnityEngine.Random.RandomRange(pitchMin, pitchMax);
+				pitch = UnityEngine.Random.Range(pitchMin, pitchMax);
 			} else {
 				pitch = pitchMin;
 			}

@@ -1,5 +1,6 @@
 ﻿#nullable enable
 using AvatarStatExtender.Data;
+using Il2CppInterop.Runtime.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,7 +11,6 @@ using static AvatarStatExtender.Tools.Tools;
 #if UNITY_EDITOR
 using UnityEditor;
 #elif IS_MOD_ENVIRONMENT
-using UnhollowerBaseLib.Attributes;
 #endif
 /// <summary>
 /// This class contains audio variants for various assorted events. Some events are built in, but custom events are supported too.
