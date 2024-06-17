@@ -2,6 +2,7 @@
 using AvatarStatExtender.API;
 using AvatarStatExtender.Components;
 using AvatarStatExtender.Data;
+using BoneLib;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using Il2CppSLZ.Data;
 using Il2CppSLZ.Marrow.Interaction;

@@ -15,6 +15,7 @@ using AvatarStatExtender.Tools;
 using HarmonyLib;
 using AvatarStatExtender.Tools.Assets;
 using Il2CppSLZ.Bonelab;
+using BoneLib;
 
 namespace AvatarStatExtender.BuiltInEvents {
 	internal static class SoundBroadcastMarshaller {

@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using SLZAvatar = Il2CppSLZ.VRMK.Avatar;
+using BoneLib;
 
 namespace AvatarStatExtender.Tools {
 
