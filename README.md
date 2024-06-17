@@ -1,5 +1,9 @@
 # Avatar Extensions
 
+## HEY: This is the Patch 4 prototype branch! This won't work so easily (and no release exists yet) until my dependencies (BoneLib, FieldInjector) both have their public releases. THIS BRANCH IS NOT EASY TO INSTALL, BUT IT WILL BE SOON.
+
+***
+
 ### ⚠ **If you were looking for a way to customize an avatar while you play, go get [Avatar Stats Loader](https://bonelab.thunderstore.io/package/FirEmerald/AvatarStatsLoader/), not this.** This is for including stats with the avatar pallet for download, not customizing them while you play.
 
 ***
@@ -20,8 +24,8 @@ You need both their avatar *and this mod* (the mod is what tells the game to get
 There is a mod (that's this repo), and there's a Unity Package (for the editor, check the releases). This goes over installing the mod portion.
 
 ## ⛽ Dependencies
-* [Download BoneLib](https://bonelab.thunderstore.io/package/gnonme/BoneLib/) first.
-* [Download FieldInjector](https://bonelab.thunderstore.io/package/WNP78/FieldInjector/) next.
+* [Download BoneLib](https://bonelab.thunderstore.io/package/gnonme/BoneLib/) first. || ⚠ Not released to Patch 4 as of writing (but please check for yourself!)
+* [Download FieldInjector](https://bonelab.thunderstore.io/package/WNP78/FieldInjector/) next. || ⚠ Not released to Patch 4 as of writing (but please check for yourself!)
 
 **The mod will fail to load and/or crash if you do not have these installed.** Install them.
 ***
@@ -29,13 +33,8 @@ There is a mod (that's this repo), and there's a Unity Package (for the editor, 
 
 ### 🖥 ...And I am on PCVR
 * Install MelonLoader. [Download it here](https://melonwiki.xyz/#/?id=automated-installation)
-	* YOU MUST USE MELONLOADER 0.5.7 - IF YOU DO NOT, YOUR GAME WILL CRASH AND BREAK.
+	* YOU MUST USE MELONLOADER 0.6.1
 	* Launch the game without any mods installed. It will take longer than usual, but this sets it up for modding.
-* Upgrade BONELAB to Patch 3 if you haven't already
-	* Right click on the game in Steam, and click properties
-	* Click on "Betas" on the side of the menu that opens up.
-	* In the dropdown, select public_beta
-	* Wait for the update to download.
 * Install BoneLib if you haven't already. [Download BoneLib here](https://bonelab.thunderstore.io/package/gnonme/BoneLib/).
 * Install FieldInjector if you haven't already. [Download FieldInjector here](https://bonelab.thunderstore.io/package/WNP78/FieldInjector/).
 * Install this mod [by downloading it from the top most file from the Releases page](https://github.com/EtiTheSpirit/AvatarStatExtender/releases).
@@ -45,17 +44,13 @@ There is a mod (that's this repo), and there's a Unity Package (for the editor, 
 > ⚠ **NOTE:** This hasn't been tested on Quest and was not made for it. This mod might be very broken, and I have no way to fix it for Quest!
 
 * Install LemonLoader. [Click here for a tutorial on YouTube](https://www.youtube.com/watch?v=Ax6vAd_lGsg)
-* Upgrade BONELAB to Patch 3 if you haven't already
-	* Go to the Oculus Store (or your game library) and select BONELAB.
-	* Scroll down to Additional Details
-	* Find Version, and choose the version number that is next to it.
-	* Press the Channel button, and choose public_beta
-	* The game should update. If it doesn't, try restarting your Quest.
 * Install BoneLib if you haven't already. [Download BoneLib here](https://bonelab.thunderstore.io/package/gnonme/BoneLib/).
 * Install FieldInjector if you haven't already. [Download FieldInjector here](https://bonelab.thunderstore.io/package/WNP78/FieldInjector/).
 * Install this mod [by downloading it from the top most file from the Releases page](https://github.com/EtiTheSpirit/AvatarStatExtender/releases).
 * Now, if you download (or make) any avatars that use the Stat Driver, they will load their custom stats!
+
 ***
+
 ## I want to make / upgrade *my* avatar project in Unity to use custom stats!
 * BACK UP YOUR UNITY PROJECT. It's not necessary, but it's usually a good idea, especially since this is still in testing phase.
 * Install the Unity Editor Package [by downloading it from the top most file from the Releases page](https://github.com/EtiTheSpirit/AvatarStatExtender/releases).
