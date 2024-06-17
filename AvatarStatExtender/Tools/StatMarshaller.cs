@@ -31,11 +31,13 @@ namespace AvatarStatExtender.Tools {
 				QuickGetMethod<SLZAvatar>(nameof(SLZAvatar.ComputeMass)),
 				postfix: new HarmonyLib.HarmonyMethod(QuickGetMethod<StatMarshaller>(nameof(ComputeMassPostfix)))
 			);
+			/*
 			Log.Info("Patching SLZ::Rig::RemapRig::JumpCharge...");
 			harmony.Patch(
 				QuickGetMethod<RemapRig>(nameof(RemapRig.JumpCharge)),
 				postfix: new HarmonyLib.HarmonyMethod(QuickGetMethod<StatMarshaller>(nameof(JumpChargePostfix)))
 			);
+			*/
 			Log.Info("Patches performed.");
 		}
 
@@ -43,8 +45,9 @@ namespace AvatarStatExtender.Tools {
 
 		private static void ComputeMassPostfix(SLZAvatar __instance) => ApplyStats(__instance);
 
+		[Obsolete("Causes CTD - Must debug.", true)]
 		private static void JumpChargePostfix(bool chargeInput = true) {
-			SLZAvatar avatar = Player.GetCurrentAvatar();
+			SLZAvatar avatar = Player.GetCurrentAvatar(); // BoneLib
 			OnJump(avatar, chargeInput);
 		}
 
@@ -117,7 +120,7 @@ namespace AvatarStatExtender.Tools {
 		}
 
 		private static MethodInfo QuickGetMethod<T>(string name) {
-			return typeof(T).GetMethod(name, BindingFlags.Static | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+			return typeof(T).GetMethod(name, BindingFlags.Static | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)!;
 		}
 
 	}
