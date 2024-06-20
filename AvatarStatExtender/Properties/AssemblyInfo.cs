@@ -13,5 +13,5 @@ using System.Runtime.InteropServices;
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("74cf3aaf-5536-4556-9992-906c2cdb571b")]
-[assembly: MelonInfo(typeof(AvatarStatExtensionMod), "Extended Avatar Driver", "1.0.0", "Xan")]
+[assembly: MelonInfo(typeof(AvatarStatExtensionMod), "Extended Avatar Driver", "1.1.0", "Xan")]
 [assembly: MelonGame("Stress Level Zero", "BONELAB")]
