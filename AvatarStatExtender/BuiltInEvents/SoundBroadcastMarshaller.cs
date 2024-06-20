@@ -53,12 +53,12 @@ namespace AvatarStatExtender.BuiltInEvents {
 			}
 		}
 
-		private static void AfterSwitchingAvatar(SLZAvatar avatar) {
-			if (avatar == null) return;
-			if (avatar.GetRigManager() == null) return;
-			if (avatar.IsPrefabAvatar()) return;
-			Log.Info($"Broadcasting spawn sound to {avatar.name}.");
-			SoundAPI.BroadcastBuiltInSoundEvent(AudioEventType.Spawn, avatar);
+		private static void AfterSwitchingAvatar(SLZAvatar newAvatar) {
+			if (newAvatar == null) return;
+			if (newAvatar.GetRigManager() == null) return;
+			if (newAvatar.IsPrefabAvatar()) return;
+			Log.Info($"Broadcasting spawn sound to {newAvatar.name}.");
+			SoundAPI.BroadcastBuiltInSoundEvent(AudioEventType.Spawn, newAvatar);
 		}
 
 	}
