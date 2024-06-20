@@ -60,7 +60,7 @@ namespace XansTools.Data {
 			// This is janky as fuck. It's cursed. I know. It has to be this way.
 			// There's a few things that require this behavior to be used (for example, a new pointer has to be used in NativeHookAttach or
 			// else invoking the original method causes a stack overflow due to re-entrance).
-			IntPtr tgtPtr = *(IntPtr*)(IntPtr)typeof(TMethodOwner).GetField(ptrFieldName, BindingFlags.NonPublic | BindingFlags.Static).GetValue(null);
+			IntPtr tgtPtr = *(IntPtr*)(IntPtr)typeof(TMethodOwner).GetField(ptrFieldName, BindingFlags.NonPublic | BindingFlags.Static).GetValue(null)!;
 			IntPtr desiredPatch = detour.Method.MethodHandle.GetFunctionPointer();
 
 			// Its this line that bothers me. Yes, the return value of that field's GetValue() call ultimately ends up at the same pointer.
@@ -69,6 +69,17 @@ namespace XansTools.Data {
 			// Thus, a new pointer is created instead, using the & operator.
 			MelonUtils.NativeHookAttach((IntPtr)(&tgtPtr), desiredPatch);
 			return Marshal.GetDelegateForFunctionPointer<TDelegate>(tgtPtr);
+		}
+
+
+		/// <summary>
+		/// Quickly accesses a method from the provided type <typeparamref name="T"/>.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="name"></param>
+		/// <returns></returns>
+		public static MethodInfo QuickGetMethod<T>(string name) {
+			return typeof(T).GetMethod(name, BindingFlags.Static | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)!;
 		}
 	}
 }

@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using SLZAvatar = Il2CppSLZ.VRMK.Avatar;
-using BoneLib;
+using XansTools.Data;
 
 namespace AvatarStatExtender.Tools {
 
@@ -23,12 +23,12 @@ namespace AvatarStatExtender.Tools {
 		internal static void Initialize(HarmonyLib.Harmony harmony) {
 			Log.Info("Patching SLZ::VRMK::Avatar::ComputeBaseStats...");
 			harmony.Patch(
-				QuickGetMethod<SLZAvatar>(nameof(SLZAvatar.ComputeBaseStats)),
+				Utils.QuickGetMethod<SLZAvatar>(nameof(SLZAvatar.ComputeBaseStats)),
 				postfix: new HarmonyLib.HarmonyMethod(QuickGetMethod<StatMarshaller>(nameof(ComputeStatsPostfix)))
 			);
 			Log.Info("Patching SLZ::VRMK::Avatar::ComputeMass...");
 			harmony.Patch(
-				QuickGetMethod<SLZAvatar>(nameof(SLZAvatar.ComputeMass)),
+				Utils.QuickGetMethod<SLZAvatar>(nameof(SLZAvatar.ComputeMass)),
 				postfix: new HarmonyLib.HarmonyMethod(QuickGetMethod<StatMarshaller>(nameof(ComputeMassPostfix)))
 			);
 			/*
@@ -47,7 +47,8 @@ namespace AvatarStatExtender.Tools {
 
 		[Obsolete("Causes CTD - Must debug.", true)]
 		private static void JumpChargePostfix(bool chargeInput = true) {
-			SLZAvatar avatar = Player.GetCurrentAvatar(); // BoneLib
+			SLZAvatar? avatar = Player.Avatar;
+			if (avatar == null) return;
 			OnJump(avatar, chargeInput);
 		}
 
@@ -61,7 +62,9 @@ namespace AvatarStatExtender.Tools {
 				jumpCaps = avatar.gameObject.AddComponent<JumpTracker>();
 			}
 
-			PhysicsRig pRig = Player.GetPhysicsRig();
+			PhysicsRig? pRig = Player.PhysRig;
+			if (pRig == null) return;
+
 			PhysGrounder pGnd = pRig.physG;
 			jumpCaps.MarkPlayerOnGround(pGnd.isGrounded);
 			if (jumpCaps.TryJump(isJumpButtonDown)) {

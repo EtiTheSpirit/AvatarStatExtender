@@ -2,7 +2,6 @@
 using AvatarStatExtender.API;
 using AvatarStatExtender.Components;
 using AvatarStatExtender.Data;
-using BoneLib;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using Il2CppSLZ.Data;
 using Il2CppSLZ.Marrow.Interaction;
@@ -56,7 +55,7 @@ namespace AvatarStatExtender.Tools {
 			}
 
 			AudioSource audio = soundObj.AddComponent<AudioSource>();
-			audio.outputAudioMixerGroup = mixer ? mixer : Audio.SFXMixer;
+			audio.outputAudioMixerGroup = mixer ? mixer : AudioMixerTargetExt.GetMixerForTarget(AudioMixerTarget.SFX);
 			audio.volume = volume;
 			audio.pitch = pitchMod;
 			audio.loop = false;
@@ -110,7 +109,7 @@ namespace AvatarStatExtender.Tools {
 			}
 
 			AudioSource audio = obj.AddComponent<AudioSource>();
-			audio.outputAudioMixerGroup = mixer ? mixer : Audio.SFXMixer;
+			audio.outputAudioMixerGroup = mixer ? mixer : AudioMixerTargetExt.GetMixerForTarget(AudioMixerTarget.SFX);
 			audio.volume = sound.volume;
 			audio.pitch = pitchMod;
 			audio.loop = false;

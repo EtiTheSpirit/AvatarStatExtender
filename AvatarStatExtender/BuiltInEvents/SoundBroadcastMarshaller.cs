@@ -15,15 +15,18 @@ using AvatarStatExtender.Tools;
 using HarmonyLib;
 using AvatarStatExtender.Tools.Assets;
 using Il2CppSLZ.Bonelab;
-using BoneLib;
+using Il2CppSLZ.Rig;
 
 namespace AvatarStatExtender.BuiltInEvents {
-	internal static class SoundBroadcastMarshaller {
+	internal sealed class SoundBroadcastMarshaller {
 
-		internal static void Initialize() {
+		internal static void Initialize(HarmonyLib.Harmony harmony) {
 			Log.Info("Initializing the sound broadcast marshaller.");
 			DamageReceptionHelper.OnDamageTaken += OnDamageTaken;
-			Hooking.OnSwitchAvatarPostfix += AfterSwitchingAvatar;
+			harmony.Patch(
+				Utils.QuickGetMethod<RigManager>(nameof(RigManager.SwitchAvatar)),
+				postfix: new HarmonyMethod(Utils.QuickGetMethod<SoundBroadcastMarshaller>(nameof(AfterSwitchingAvatar)))
+			);
 		}
 
 

@@ -1,6 +1,6 @@
 # Avatar Extensions
 
-## HEY: This is the Patch 4 prototype branch! This won't work so easily (and no release exists yet) until my dependencies (BoneLib, FieldInjector) both have their public releases. THIS BRANCH IS NOT EASY TO INSTALL, BUT IT WILL BE SOON.
+## HEY: This is the Patch 4 prototype branch! This won't work so easily (and no release exists yet) until my dependencies (FieldInjector) both have their public releases. THIS BRANCH IS NOT EASY TO INSTALL, BUT IT WILL BE SOON.
 
 ***
 
@@ -24,7 +24,7 @@ You need both their avatar *and this mod* (the mod is what tells the game to get
 There is a mod (that's this repo), and there's a Unity Package (for the editor, check the releases). This goes over installing the mod portion.
 
 ## ⛽ Dependencies
-* [Download BoneLib](https://bonelab.thunderstore.io/package/gnonme/BoneLib/) first. || ⚠ Not released to Patch 4 as of writing (but please check for yourself!)
+* **You no longer need BoneLib.** This is listed here for brevity among those coming from Patch 3.
 * [Download FieldInjector](https://bonelab.thunderstore.io/package/WNP78/FieldInjector/) next. || ⚠ Not released to Patch 4 as of writing (but please check for yourself!)
 
 **The mod will fail to load and/or crash if you do not have these installed.** Install them.
@@ -32,10 +32,9 @@ There is a mod (that's this repo), and there's a Unity Package (for the editor, 
 ## I want to use custom stats on an avatar I installed!...
 
 ### 🖥 ...And I am on PCVR
-* Install MelonLoader. [Download it here](https://melonwiki.xyz/#/?id=automated-installation)
-	* YOU MUST USE MELONLOADER 0.6.1
-	* Launch the game without any mods installed. It will take longer than usual, but this sets it up for modding.
-* Install BoneLib if you haven't already. [Download BoneLib here](https://bonelab.thunderstore.io/package/gnonme/BoneLib/).
+* Install MelonLoader. [Download it here](https://melonwiki.xyz/#/?id=automated-installation).
+	* YOU MUST USE MELONLOADER 0.6.1 (allegedly up to 0.6.3 works, though).
+	* Launch the game without any mods installed, *if you haven't played with mods before*. It will take longer than usual, but this sets it up for modding.
 * Install FieldInjector if you haven't already. [Download FieldInjector here](https://bonelab.thunderstore.io/package/WNP78/FieldInjector/).
 * Install this mod [by downloading it from the top most file from the Releases page](https://github.com/EtiTheSpirit/AvatarStatExtender/releases).
 * Now, if you download (or make) any avatars that use the Stat Driver, they will load their custom stats!
@@ -44,7 +43,6 @@ There is a mod (that's this repo), and there's a Unity Package (for the editor, 
 > ⚠ **NOTE:** This hasn't been tested on Quest and was not made for it. This mod might be very broken, and I have no way to fix it for Quest!
 
 * Install LemonLoader. [Click here for a tutorial on YouTube](https://www.youtube.com/watch?v=Ax6vAd_lGsg)
-* Install BoneLib if you haven't already. [Download BoneLib here](https://bonelab.thunderstore.io/package/gnonme/BoneLib/).
 * Install FieldInjector if you haven't already. [Download FieldInjector here](https://bonelab.thunderstore.io/package/WNP78/FieldInjector/).
 * Install this mod [by downloading it from the top most file from the Releases page](https://github.com/EtiTheSpirit/AvatarStatExtender/releases).
 * Now, if you download (or make) any avatars that use the Stat Driver, they will load their custom stats!

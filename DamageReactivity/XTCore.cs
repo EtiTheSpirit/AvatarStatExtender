@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Reflection;
+using XansTools.Data;
 
 namespace XansTools {
 	public class XTCore : MelonMod {
@@ -14,6 +15,7 @@ namespace XansTools {
 			base.OnInitializeMelon();
 			Prefs.Initialize(); // MUST be the first action in my code.
 			Log.Initialize(LoggerInstance);
+			Player.Initialize(HarmonyInstance);
 			DamageReactionFacilitator.Patch();
 
 			//MethodBase test = methodof(OnInitializeMelon);

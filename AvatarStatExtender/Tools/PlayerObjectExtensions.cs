@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using XansTools.Data;
 using SLZAvatar = Il2CppSLZ.VRMK.Avatar;
 using UnityObject = UnityEngine.Object;
 
@@ -33,11 +34,13 @@ namespace AvatarStatExtender.Tools {
 
 		/// <summary>
 		/// Returns every player in the current scene, guaranteed to start with the local player. To get the local player,
-		/// use <see cref="BoneLib.Player.rigManager"/>, not this.
+		/// use <see cref="Player.RigMgr"/>, not this.
 		/// </summary>
 		/// <returns></returns>
 		public static IEnumerable<RigManager> GetAllPlayers() {
-			yield return BoneLib.Player.rigManager;
+			if (Player.RigMgr != null) {
+				yield return Player.RigMgr;
+			}
 
 			foreach (RigManager mgr in GetRemotePlayers()) {
 				yield return mgr;

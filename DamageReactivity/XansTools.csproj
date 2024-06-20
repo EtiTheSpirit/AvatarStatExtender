@@ -21,9 +21,6 @@
     <Reference Include="Assembly-CSharp">
       <HintPath>E:\Steam Games\steamapps\common\BONELAB\MelonLoader\Il2CppAssemblies\Assembly-CSharp.dll</HintPath>
     </Reference>
-    <Reference Include="BoneLib">
-      <HintPath>..\include\BoneLib.dll</HintPath>
-    </Reference>
     <Reference Include="FieldInjector">
       <HintPath>..\include\FieldInjector.dll</HintPath>
     </Reference>

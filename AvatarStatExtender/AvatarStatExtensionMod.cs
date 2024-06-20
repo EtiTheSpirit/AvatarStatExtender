@@ -25,7 +25,7 @@ namespace AvatarStatExtender {
 			}
 
 			Log.Debug("Creating Harmony...");
-			HarmonyLib.Harmony harmony = new HarmonyLib.Harmony("Extended Avatar Driver");
+			HarmonyLib.Harmony harmony = HarmonyInstance;//new HarmonyLib.Harmony("Extended Avatar Driver");
 
 			Log.Debug("Injecting fields from the stat component...");
 			FieldInjector.SerialisationHandler.Inject<AvatarStatDriver>();
@@ -33,7 +33,7 @@ namespace AvatarStatExtender {
 
 			Log.Debug("Injection complete. Preparing the stat marshaller and audio driver...");
 			StatMarshaller.Initialize(harmony);
-			SoundBroadcastMarshaller.Initialize();
+			SoundBroadcastMarshaller.Initialize(harmony);
 		}
 
 	}

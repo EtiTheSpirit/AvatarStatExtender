@@ -31,10 +31,6 @@
     <Reference Include="Assembly-CSharp">
       <HintPath>E:\Steam Games\steamapps\common\BONELAB\MelonLoader\Il2CppAssemblies\Assembly-CSharp.dll</HintPath>
     </Reference>
-    <Reference Include="BoneLib, Version=2.4.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\include\BoneLib.dll</HintPath>
-    </Reference>
     <Reference Include="FieldInjector">
       <HintPath>..\include\FieldInjector.dll</HintPath>
     </Reference>
