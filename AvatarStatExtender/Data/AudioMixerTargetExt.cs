@@ -85,7 +85,7 @@ namespace AvatarStatExtender.Data {
 		/// Finds the music and sfx audio mixers.
 		/// </summary>
 		private static void GetAudioMixers() {
-			if (MusicMixer != null && SFXMixer != null && GunshotMixer != null && MasterMixer != null) return;
+			if (_master != null && _music != null && _sfx != null && _gunshot != null) return;
 
 			AudioMixerGroup[] mixers = Resources.FindObjectsOfTypeAll<AudioMixerGroup>();
 			MasterMixer = mixers.FirstOrDefault(x => x.name == "Master");
