@@ -9,7 +9,7 @@ using System.Reflection;
 using XansTools.Data;
 using XansTools;
 
-[assembly: MelonInfo(typeof(XTCore), "Xan's Tools", "1.1.0", "Xan")]
+[assembly: MelonInfo(typeof(XTCore), "Xan's Tools", "2.0.0", "Xan")]
 [assembly: MelonGame("Stress Level Zero", "BONELAB")]
 [assembly: MelonPriority(1)] // Priority 1 instead of 0 so this loads late.
 namespace XansTools {
