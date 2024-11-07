@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.35013.160
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AvatarStatExtender_P6", "AvatarStatExtender_P6\AvatarStatExtender_P6.csproj", "{FF55CD55-4036-4BCA-9F72-994324D94BAD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XansTools", "XansTools\XansTools.csproj", "{6C805CF5-4018-4B9B-ADC8-82B2D2158D68}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FF55CD55-4036-4BCA-9F72-994324D94BAD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF55CD55-4036-4BCA-9F72-994324D94BAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF55CD55-4036-4BCA-9F72-994324D94BAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF55CD55-4036-4BCA-9F72-994324D94BAD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C805CF5-4018-4B9B-ADC8-82B2D2158D68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C805CF5-4018-4B9B-ADC8-82B2D2158D68}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C805CF5-4018-4B9B-ADC8-82B2D2158D68}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C805CF5-4018-4B9B-ADC8-82B2D2158D68}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1DF5041B-4D11-4ABA-8A36-E417DD37B0AB}
+	EndGlobalSection
+EndGlobal
