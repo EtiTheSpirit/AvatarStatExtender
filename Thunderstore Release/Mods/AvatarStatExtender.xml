@@ -1,0 +1,1705 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>AvatarStatExtender</name>
+    </assembly>
+    <members>
+        <member name="T:AvatarStatExtender.API.PlayableSoundData">
+            <summary>
+            Contains an <see cref="T:UnityEngine.AudioClip"/>, a <see cref="F:AvatarStatExtender.API.PlayableSoundData.pitch"/>, a <see cref="F:AvatarStatExtender.API.PlayableSoundData.volume"/>, and 
+            <see cref="T:AvatarStatExtender.Data.SoundFlags"/> to determine how it behaves in the world while playing.
+            </summary>
+        </member>
+        <member name="F:AvatarStatExtender.API.PlayableSoundData.DEFAULT_SOUND_FLAGS">
+            <summary>
+            These sound flags are the default.
+            </summary>
+        </member>
+        <member name="F:AvatarStatExtender.API.PlayableSoundData.sound">
+            <summary>
+            The sound to play.
+            </summary>
+        </member>
+        <member name="F:AvatarStatExtender.API.PlayableSoundData.volume">
+            <summary>
+            The volume to play the sound with, limited between 0 and 2.
+            </summary>
+        </member>
+        <member name="F:AvatarStatExtender.API.PlayableSoundData.pitch">
+            <summary>
+            The pitch to play the sound with, limited between -1 and 2
+            </summary>
+        </member>
+        <member name="F:AvatarStatExtender.API.PlayableSoundData.playTechnique">
+            <summary>
+            Determines how the sound is updated after being spawned in the world.
+            </summary>
+        </member>
+        <member name="F:AvatarStatExtender.API.PlayableSoundData.mixer">
+            <summary>
+            The mixer that this sound plays under. If null, it will be treated as the master mixer.
+            </summary>
+        </member>
+        <member name="M:AvatarStatExtender.API.PlayableSoundData.#ctor(AvatarStatExtender.Data.ReadOnlyAudioEntry,System.Int32,AvatarStatExtender.Data.SoundFlags,UnityEngine.Audio.AudioMixerGroup)">
+            <summary>
+            Select a sound from the entry using its provided index. The <see cref="F:AvatarStatExtender.API.PlayableSoundData.pitch"/> and <see cref="F:AvatarStatExtender.API.PlayableSoundData.volume"/>
+            fields are set appropriately (including pitch randomization, if applicable).
+            </summary>
+            <param name="entry"></param>
+            <param name="index"></param>
+            <param name="playTechnique"></param>
+            <param name="mixer"></param>
+        </member>
+        <member name="M:AvatarStatExtender.API.PlayableSoundData.#ctor(UnityEngine.AudioClip,System.Single,System.Single,AvatarStatExtender.Data.SoundFlags,UnityEngine.Audio.AudioMixerGroup)">
+            <summary>
+            Create a new sound, potentially including an entry that isn't even in the list.
+            </summary>
+            <param name="sound"></param>
+            <param name="volume"></param>
+            <param name="pitch"></param>
+            <param name="playTechnique"></param>
+            <param name="mixer"></param>
+        </member>
+        <member name="M:AvatarStatExtender.API.PlayableSoundData.#ctor(UnityEngine.AudioClip,System.Single,UnityEngine.Vector2,AvatarStatExtender.Data.SoundFlags,UnityEngine.Audio.AudioMixerGroup)">
+            <summary>
+            Create a new sound, potentially including an entry that isn't even in the list.
+            </summary>
+            <param name="sound"></param>
+            <param name="volume"></param>
+            <param name="randomPitch"></param>
+            <param name="playTechnique"></param>
+            <param name="mixer"></param>
+        </member>
+        <member name="T:AvatarStatExtender.API.SoundAPI">
+            <summary>
+            This class handles all sound API members.
+            </summary>
+        </member>
+        <member name="F:AvatarStatExtender.API.SoundAPI.PLAYTYPE_DEFAULT_RANDOM">
+            <summary>
+            This <see cref="T:AvatarStatExtender.API.SoundAPI.AudioSelectionDelegate"/> picks one random sound. The first four arguments are unused and can be <see langword="default"/>.
+            </summary>
+        </member>
+        <member name="F:AvatarStatExtender.API.SoundAPI.PLAYTYPE_DEFAULT_ALL">
+            <summary>
+            This <see cref="T:AvatarStatExtender.API.SoundAPI.AudioSelectionDelegate"/> returns all sounds. The first four arguments are unused and can be <see langword="default"/>.
+            </summary>
+        </member>
+        <member name="M:AvatarStatExtender.API.SoundAPI.BroadcastSoundEvent(System.String,Il2CppSLZ.VRMK.Avatar[])">
+            <summary>
+            Invoke this method with one or more event names. These events will be broadcast to all audio 
+            components that are in the current scene, which in turn will request their sounds are played.
+            While you cannot pass in <see cref="T:AvatarStatExtender.Data.AudioEventType"/>, you <em>can</em> manually enter the
+            names of a vanilla event (but this is discouraged, hence why the enum is not an available parameter.
+            <para/>
+            Returns an array of all of the <see cref="T:UnityEngine.GameObject"/>s that were created to play the sound effects.
+            Each object is given the name of its <see cref="T:UnityEngine.AudioClip"/>.
+            </summary>
+            <param name="names"></param>
+        </member>
+        <member name="M:AvatarStatExtender.API.SoundAPI.BroadcastBuiltInSoundEvent(AvatarStatExtender.Data.AudioEventType,Il2CppSLZ.VRMK.Avatar[])">
+            <summary>
+            Internal method to send vanilla events out.
+            </summary>
+            <param name="builtInEvents"></param>
+        </member>
+        <member name="M:AvatarStatExtender.API.SoundAPI.BroadcastEntriesOf(Il2CppSLZ.VRMK.Avatar,Il2CppSLZ.VRMK.Avatar,System.Collections.Generic.IEnumerable{AvatarStatExtender.Data.ReadOnlyAudioEntry},AvatarStatExtender.Data.AudioEventType,System.String)">
+            <summary>
+            Provided with an avatar to receive the sounds, and the sounds that the avatar can play, this will play each sound.
+            </summary>
+            <param name="avatar"></param>
+            <param name="entries"></param>
+        </member>
+        <member name="M:AvatarStatExtender.API.SoundAPI.RegisterSoundPlayTypeSelectionHandler(System.String,AvatarStatExtender.API.SoundAPI.AudioSelectionDelegate)">
+            <summary>
+            Use this to register a Custom Sound Technique to the system. When an event fires on a sound group with the provided
+            <paramref name="playType"/>, the provided <paramref name="delegate"/> will be executed to collect what sounds
+            need to be played, and with what pitches/volumes.
+            </summary>
+            <param name="playType"></param>
+            <param name="delegate"></param>
+            <exception cref="T:System.ArgumentNullException"></exception>
+            <exception cref="T:System.InvalidOperationException"></exception>
+        </member>
+        <member name="T:AvatarStatExtender.API.SoundAPI.AudioSelectionDelegate">
+            <summary>
+            This delegate may fire multiple times, and allows returning custom sounds from a given category.
+            </summary>
+            <param name="avatar">The avatar that this is currently executing on.</param>
+            <param name="playTypeName">The name of this delegate as you registered it.</param>
+            <param name="vanillaEvent">If not <see cref="F:AvatarStatExtender.Data.AudioEventType.Custom"/>, this was triggered by a vanilla event of this type.</param>
+            <param name="customEvent">If not null, this was triggered by a custom event of this type.</param>
+            <param name="triggeredGroup">The group that audio will be chosen out of. A reminder that you can use this for events.</param>
+            <returns></returns>
+        </member>
+        <member name="T:AvatarStatExtender.Data.AudioEntries">
+            <summary>
+            This class provides methods to convert to and from an easier data format for <see cref="T:AvatarExtendedAudioContainer"/>.
+            </summary>
+        </member>
+        <member name="M:AvatarStatExtender.Data.AudioEntries.EntriesFromContainer(AvatarExtendedAudioContainer)">
+            <summary>
+            Iterates over all entries stored within the FieldInjector-friendly form of data stored in the <paramref name="container"/>,
+            and returns each set of data as an <see cref="T:AvatarStatExtender.Data.AudioEntry"/>.
+            </summary>
+            <param name="container"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AvatarStatExtender.Data.AudioEntries.TryRemoveEntry(AvatarExtendedAudioContainer,AvatarStatExtender.Data.AudioEntry)">
+            <summary>
+            Attempts to remove an audio entry by reference.
+            </summary>
+            <param name="container"></param>
+            <param name="entry"></param>
+            <returns></returns>
+            <exception cref="T:System.ArgumentNullException"></exception>
+        </member>
+        <member name="M:AvatarStatExtender.Data.AudioEntries.TryRemoveEntryAt(AvatarExtendedAudioContainer,System.Int32)">
+            <summary>
+            Attempts to remove an audio entry by index.
+            </summary>
+            <param name="container"></param>
+            <param name="entry"></param>
+            <returns></returns>
+            <exception cref="T:System.ArgumentNullException"></exception>
+        </member>
+        <member name="M:AvatarStatExtender.Data.AudioEntries.EntryFromContainer(AvatarExtendedAudioContainer,System.Int32,System.Boolean)">
+            <summary>
+            Converts a single value into an <see cref="T:AvatarStatExtender.Data.AudioEntry"/> from the provided <paramref name="container"/>.
+            </summary>
+            <param name="container"></param>
+            <param name="index"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AvatarStatExtender.Data.AudioEntries.OverwriteFromEntries(AvatarExtendedAudioContainer,System.Collections.Generic.IEnumerable{AvatarStatExtender.Data.AudioEntry})">
+            <summary>
+            Iterates over all of the provided <see cref="T:AvatarStatExtender.Data.AudioEntries"/> and overwrites the data stored within the provided
+            <paramref name="container"/> such that it reflects the values provided by the entries.
+            </summary>
+            <param name="container"></param>
+            <param name="entriesEnumerable"></param>
+        </member>
+        <member name="M:AvatarStatExtender.Data.AudioEntries.OverwriteFromEntry(AvatarExtendedAudioContainer,AvatarStatExtender.Data.AudioEntry,System.Int32,System.Boolean)">
+            <summary>
+            Overwrites the values at the provided index with the provided entry.
+            </summary>
+            <param name="container"></param>
+            <param name="entry"></param>
+            <param name="index"></param>
+        </member>
+        <member name="T:AvatarStatExtender.Data.AudioEntry">
+            <summary>
+            This class is a representation of the audio data as seen in the custom audio extension.
+            It exists in the editor, as it cannot be used during runtime as a direct result of limitations imposed
+            by the Field Injector program.
+            <para/>
+            Now, there is nothing that says this can't be in the mod anyway, and just have a translator included.
+            </summary>
+        </member>
+        <member name="P:AvatarStatExtender.Data.AudioEntry.Name">
+            <summary>
+            The name of this audio group.
+            </summary>
+        </member>
+        <member name="P:AvatarStatExtender.Data.AudioEntry.UseCustomPlayType">
+            <summary>
+            If true, use <see cref="P:AvatarStatExtender.Data.AudioEntry.CustomPlayType"/>
+            </summary>
+        </member>
+        <member name="P:AvatarStatExtender.Data.AudioEntry.PlayType">
+            <summary>
+            The technique that this audio group uses to play.
+            </summary>
+        </member>
+        <member name="P:AvatarStatExtender.Data.AudioEntry.CustomPlayType">
+            <summary>
+            The custom delegate that this will invoke to determine how to play audio.
+            </summary>
+        </member>
+        <member name="P:AvatarStatExtender.Data.AudioEntry.EventType">
+            <summary>
+            The type of event that this audio reacts to.
+            </summary>
+        </member>
+        <member name="P:AvatarStatExtender.Data.AudioEntry.CustomEventTypes">
+            <summary>
+            A string based event that this audio reacts to.
+            <para/>
+            Note that this <strong>must</strong> be all lowercase (and will assert such) for the sake of better compatibility between mods.
+            If your damage event is generic, try coming up with as generalized a name as possible.
+            <para/>
+            If you wish to support multiple events, separate them with semicolon <c>;</c> like so: <c>yeeted;sent_to_shadow_realm;obliterated;deleted</c>
+            </summary>
+        </member>
+        <member name="P:AvatarStatExtender.Data.AudioEntry.Sounds">
+            <summary>
+            The list of sounds in this entry.
+            </summary>
+        </member>
+        <member name="P:AvatarStatExtender.Data.AudioEntry.PitchRange">
+            <summary>
+            The range of pitch that automatic sound playing can use, (min, max).
+            </summary>
+        </member>
+        <member name="P:AvatarStatExtender.Data.AudioEntry.Volume">
+            <summary>
+            The volume of this slider.
+            </summary>
+        </member>
+        <member name="P:AvatarStatExtender.Data.AudioEntry.Mixer">
+            <summary>
+            The mixer that this should use when playing.
+            </summary>
+        </member>
+        <member name="P:AvatarStatExtender.Data.AudioEntry.SoundFlags">
+            <summary>
+            How this should should be updated when playing.
+            </summary>
+        </member>
+        <member name="P:AvatarStatExtender.Data.AudioEntry.OverrideTemplateAudioSource">
+            <summary>
+            If defined, this will override the template audio source used by default when playing sounds.
+            </summary>
+        </member>
+        <member name="M:AvatarStatExtender.Data.AudioEntry.#ctor">
+            <summary>
+            Create a new, default audio entry.
+            </summary>
+        </member>
+        <member name="M:AvatarStatExtender.Data.AudioEntry.#ctor(System.String,AvatarStatExtender.Data.AudioPlayType,System.String,AvatarStatExtender.Data.AudioEventType,System.String,System.Collections.Generic.List{UnityEngine.AudioClip},UnityEngine.Vector2,System.Single,AvatarStatExtender.Data.AudioMixerTarget,AvatarStatExtender.Data.SoundFlags,UnityEngine.AudioSource)">
+            <summary>
+            Create an audio entry from existing data.
+            </summary>
+            <param name="name"></param>
+            <param name="playType"></param>
+            <param name="customPlayType"></param>
+            <param name="eventType"></param>
+            <param name="customEventTypes"></param>
+            <param name="sounds"></param>
+            <exception cref="T:System.ArgumentNullException"></exception>
+        </member>
+        <member name="T:AvatarStatExtender.Data.AudioCache">
+            <summary>
+            Keeps a cache of audio components loaded by avatars. This cache is very verbose, at the cost of large memory usage
+            (likely several hundred megabytes when many avatar mods are installed).
+            </summary>
+        </member>
+        <member name="F:AvatarStatExtender.Data.AudioCache._cachePerAvatar">
+            <summary>
+            Binds an avatar prefab to a list of entries.
+            <para/>
+            Note that this uses <see cref="T:System.IntPtr"/> because il2cpp objects that are represented in managed form are comparable
+            to "proxies" to a pointer rather than the actual tangible object itself.
+            </summary>
+        </member>
+        <member name="F:AvatarStatExtender.Data.AudioCache._cachePerAvatarByEventName">
+            <summary>
+            Binds an avatar prefab to a lookup from custom event name =&gt; entries in that avatar's list of sound groups.
+            <para/>
+            Note that this uses <see cref="T:System.IntPtr"/> because il2cpp objects that are represented in managed form are comparable
+            to "proxies" to a pointer rather than the actual tangible object itself.
+            </summary>
+        </member>
+        <member name="F:AvatarStatExtender.Data.AudioCache._cachePerAvatarByEventEnum">
+            <summary>
+            Binds an avatar prefab to a lookup from custom event name =&gt; entries in that avatar's list of sound groups.
+            <para/>
+            Note that this uses <see cref="T:System.IntPtr"/> because il2cpp objects that are represented in managed form are comparable
+            to "proxies" to a pointer rather than the actual tangible object itself.
+            </summary>
+        </member>
+        <member name="M:AvatarStatExtender.Data.AudioCache.GetAllSoundsOfAvatar(Il2CppSLZ.VRMK.Avatar)">
+            <summary>
+            Provided with an avatar, be it a clone from a player or the real prefab, this will return all <see cref="T:AvatarStatExtender.Data.ReadOnlyAudioEntry"/> objects
+            for the <see cref="T:AvatarExtendedAudioContainer"/> attached to the avatar, if it has one.
+            <para/>
+            If the groups have yet to be resolved, this will resolve and cache them. If the avatar has no extended container, it will return
+            an empty array.
+            </summary>
+            <param name="avatar"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AvatarStatExtender.Data.AudioCache.GetAllSoundsOfAvatarPrefab(Il2CppSLZ.VRMK.Avatar)">
+            <summary>
+            The same as <see cref="M:AvatarStatExtender.Data.AudioCache.GetAllSoundsOfAvatar(Il2CppSLZ.VRMK.Avatar)"/> but this assumes that the caller guarantees
+            the incoming avatar is the prefab instance.
+            </summary>
+            <param name="originalAvy"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AvatarStatExtender.Data.AudioCache.GetMatchingSoundsFromAvatarSingle(Il2CppSLZ.VRMK.Avatar,System.String)">
+            <summary>
+            Collects all of the sound groups relevant to this single custom event. Note that this does not propagate vanilla event type names.
+            </summary>
+            <param name="prefab"></param>
+            <param name="singleCustomEventType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AvatarStatExtender.Data.AudioCache.GetMatchingSoundsFromAvatarSingle(Il2CppSLZ.VRMK.Avatar,AvatarStatExtender.Data.AudioEventType)">
+            <summary>
+            Collects all of the sound groups relevant to this single event. Note that this does not propagate vanilla event types.
+            </summary>
+            <param name="prefab"></param>
+            <param name="singleEventType"></param>
+            <returns></returns>
+        </member>
+        <member name="T:AvatarStatExtender.Data.AudioEventType">
+            <summary>
+            Built in audio event types, which are used to play sounds when certain things happen in game.
+            </summary>
+        </member>
+        <member name="F:AvatarStatExtender.Data.AudioEventType.Custom">
+            <summary>
+            Denotes a custom, string-based event type will be used instead of this enum.
+            </summary>
+        </member>
+        <member name="F:AvatarStatExtender.Data.AudioEventType.HitBullet">
+            <summary>
+            This event fires when the avatar gets hit by something with the "Piercing" damage type,
+            which is typically reserved for bullets and projectiles..
+            </summary>
+        </member>
+        <member name="F:AvatarStatExtender.Data.AudioEventType.HitBlunt">
+            <summary>
+            This event fires when the avatar gets hit by any non-piercing damage type.
+            </summary>
+        </member>
+        <member name="F:AvatarStatExtender.Data.AudioEventType.HitAny">
+            <summary>
+            This event fires when the avatar takes any damage.
+            </summary>
+        </member>
+        <member name="F:AvatarStatExtender.Data.AudioEventType.Spawn">
+            <summary>
+            This event fires when the avatar spawns.
+            </summary>
+        </member>
+        <member name="T:AvatarStatExtender.Data.EventNameAttribute">
+            <summary>
+            This attribute is used by the system to bind a preset string event name to an enum event.
+            </summary>
+        </member>
+        <member name="F:AvatarStatExtender.Data.EventNameAttribute.name">
+            <summary>
+            The string-based name of an event.
+            </summary>
+        </member>
+        <member name="M:AvatarStatExtender.Data.EventNameAttribute.#ctor(System.String)">
+            <summary>
+            Construct a new attribute denoting the string-based name of an audio event.
+            </summary>
+            <param name="name"></param>
+        </member>
+        <member name="T:AvatarStatExtender.Data.AudioEventTypeExt">
+            <summary>
+            Provides utilities for the <see cref="T:AvatarStatExtender.Data.AudioEventType"/> enum.
+            </summary>
+        </member>
+        <member name="F:AvatarStatExtender.Data.AudioEventTypeExt.MAX_FLAG">
+            <summary>
+            The highest bit <em>index</em> that represents a valid <see cref="T:AvatarStatExtender.Data.AudioEventType"/>.
+            </summary>
+        </member>
+        <member name="F:AvatarStatExtender.Data.AudioEventTypeExt.ALL_FLAGS">
+            <summary>
+            All defined single bit values of <see cref="T:AvatarStatExtender.Data.AudioEventType"/>, excluding <see cref="F:AvatarStatExtender.Data.AudioEventType.Custom"/>.
+            </summary>
+        </member>
+        <member name="F:AvatarStatExtender.Data.AudioEventTypeExt.ALL_FLAGS_EVENT_NAMES">
+            <summary>
+            The event names of each audio event type, synchronized with <see cref="F:AvatarStatExtender.Data.AudioEventTypeExt.ALL_FLAGS"/> (meaning it excludes custom as well).
+            </summary>
+        </member>
+        <member name="M:AvatarStatExtender.Data.AudioEventTypeExt.TryGetNameFromSingleFlag(AvatarStatExtender.Data.AudioEventType,System.String@)">
+            <summary>
+            Returns the event name of the provided single flag.
+            </summary>
+            <param name="flag"></param>
+            <returns></returns>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:AvatarStatExtender.Data.AudioEventTypeExt.TryGetFromName(System.String,AvatarStatExtender.Data.AudioEventType@)">
+            <summary>
+            Returns the flag associated 
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="T:AvatarStatExtender.Data.AudioMixerTarget">
+            <summary>
+            Which audio mixer does this target?
+            </summary>
+        </member>
+        <member name="F:AvatarStatExtender.Data.AudioMixerTarget.Master">
+            <summary>
+            Target the master volume mixer.
+            </summary>
+        </member>
+        <member name="F:AvatarStatExtender.Data.AudioMixerTarget.Gunshot">
+            <summary>
+            Target a mixer specific to gunshot SFX.
+            </summary>
+        </member>
+        <member name="F:AvatarStatExtender.Data.AudioMixerTarget.Music">
+            <summary>
+            Target the mixer for music.
+            </summary>
+        </member>
+        <member name="F:AvatarStatExtender.Data.AudioMixerTarget.SFX">
+            <summary>
+            Target the mixer for general sound effects.
+            </summary>
+        </member>
+        <member name="T:AvatarStatExtender.Data.AudioMixerTargetExt">
+            <summary>
+            Additional utils related to the <see cref="T:AvatarStatExtender.Data.AudioMixerTarget"/> enum.
+            </summary>
+        </member>
+        <member name="M:AvatarStatExtender.Data.AudioMixerTargetExt.GetMixerForTarget(AvatarStatExtender.Data.AudioMixerTarget)">
+            <summary>
+            Get ahold of the mixer corresponding to the provided <paramref name="target"/>.
+            If the value is out of range, the master mixer is returned.
+            </summary>
+            <param name="target"></param>
+            <returns></returns>
+        </member>
+        <member name="P:AvatarStatExtender.Data.AudioMixerTargetExt.MasterMixer">
+            <summary>
+            This mixer controls the volume of all other mixers.
+            </summary>
+        </member>
+        <member name="P:AvatarStatExtender.Data.AudioMixerTargetExt.MusicMixer">
+            <summary>
+            This mixer controls the volume of music.
+            </summary>
+        </member>
+        <member name="P:AvatarStatExtender.Data.AudioMixerTargetExt.SFXMixer">
+            <summary>
+            This mixer controls the volume of misc. sfx
+            </summary>
+        </member>
+        <member name="P:AvatarStatExtender.Data.AudioMixerTargetExt.GunshotMixer">
+            <summary>
+            This mixer controls the volume of gunshots.
+            </summary>
+        </member>
+        <member name="M:AvatarStatExtender.Data.AudioMixerTargetExt.GetAudioMixers">
+            <summary>
+            Finds the music and sfx audio mixers.
+            </summary>
+        </member>
+        <member name="T:AvatarStatExtender.Data.AudioPlayType">
+            <summary>
+            What type of audio gets played?
+            </summary>
+        </member>
+        <member name="F:AvatarStatExtender.Data.AudioPlayType.Custom">
+            <summary>
+            The audio that gets played is chosen by a custom delegate by name, which must be registered via
+            <see cref="M:AvatarStatExtender.API.SoundAPI.RegisterSoundPlayTypeSelectionHandler(System.String,AvatarStatExtender.API.SoundAPI.AudioSelectionDelegate)"/>
+            </summary>
+        </member>
+        <member name="F:AvatarStatExtender.Data.AudioPlayType.Random">
+            <summary>
+            The system automatically selects one sound out of the list associated with the group.
+            </summary>
+        </member>
+        <member name="F:AvatarStatExtender.Data.AudioPlayType.AllTogether">
+            <summary>
+            The system selects all sounds out of the group.
+            </summary>
+        </member>
+        <member name="T:AvatarStatExtender.Data.AvatarAndPrefabPair">
+            <summary>
+            A utility data container that contains both an avatar's runtime clone (or, "you"), and the avatar's master prefab (the crate).
+            </summary>
+        </member>
+        <member name="F:AvatarStatExtender.Data.AvatarAndPrefabPair.prefab">
+            <summary>
+            The original prefab of the avatar, as stored in the crate. This object is kept alive.
+            </summary>
+        </member>
+        <member name="F:AvatarStatExtender.Data.AvatarAndPrefabPair.clone">
+            <summary>
+            The clone of the avatar as it appears in runtime (the player model).
+            </summary>
+        </member>
+        <member name="M:AvatarStatExtender.Data.AvatarAndPrefabPair.#ctor(Il2CppSLZ.VRMK.Avatar,Il2CppSLZ.VRMK.Avatar)">
+            <summary>
+            Construct a new pair using the already provided prefab and clone.
+            </summary>
+            <param name="prefab"></param>
+            <param name="clone"></param>
+            <exception cref="T:System.ArgumentException">If the prefab isn't a prefab, or the clone isn't a clone.</exception>
+        </member>
+        <member name="M:AvatarStatExtender.Data.AvatarAndPrefabPair.#ctor(Il2CppSLZ.VRMK.Avatar)">
+            <summary>
+            Construct a new pair using the provided clone. The prefab is located from the clone.
+            </summary>
+            <param name="clone"></param>
+            <exception cref="T:System.ArgumentException">The clone is a prefab.</exception>
+            <exception cref="T:System.NullReferenceException">The prefab was not able to be located.</exception>
+        </member>
+        <member name="T:AvatarStatExtender.Data.ReadOnlyAudioEntry">
+            <summary>
+            A variation of the internal audio entry type that is designed for public use, and is immutable as a result.
+            </summary>
+        </member>
+        <member name="F:AvatarStatExtender.Data.ReadOnlyAudioEntry._keepAlive">
+            <summary>
+            This array keeps the audio clips from being garbage collected on the il2cpp side (ever).
+            <para/>
+            Without this, the audio might be GCed anyway because il2cpp has its own separate collector.
+            Managed objects serve more as "proxies" to these objects, providing outside access to native memory.
+            By storing them in the il2cpp array, a reference is kept on the il2cpp side, preventing garbage collection.
+            </summary>
+        </member>
+        <member name="P:AvatarStatExtender.Data.ReadOnlyAudioEntry.Name">
+            <summary>
+            The name of this audio group.
+            </summary>
+        </member>
+        <member name="P:AvatarStatExtender.Data.ReadOnlyAudioEntry.UseCustomPlayType">
+            <summary>
+            If true, use <see cref="P:AvatarStatExtender.Data.ReadOnlyAudioEntry.CustomPlayType"/>. Note that it has not been sanitized.
+            </summary>
+        </member>
+        <member name="P:AvatarStatExtender.Data.ReadOnlyAudioEntry.PlayType">
+            <summary>
+            The technique that this audio group uses to play.
+            </summary>
+        </member>
+        <member name="P:AvatarStatExtender.Data.ReadOnlyAudioEntry.CustomPlayType">
+            <summary>
+            The custom delegate that this will invoke to determine how to play audio.
+            </summary>
+        </member>
+        <member name="P:AvatarStatExtender.Data.ReadOnlyAudioEntry.EventType">
+            <summary>
+            The type of event that this audio reacts to. Note that unlike the editor counterpart,
+            this includes vanilla events that were listed in <see cref="P:AvatarStatExtender.Data.ReadOnlyAudioEntry.CustomEventTypes"/>.
+            </summary>
+        </member>
+        <member name="P:AvatarStatExtender.Data.ReadOnlyAudioEntry.CustomEventTypes">
+            <summary>
+            A string based event that this audio reacts to. Consider using <see cref="P:AvatarStatExtender.Data.ReadOnlyAudioEntry.ResolvedCustomEvents"/>.
+            <para/>
+            Note that this <strong>must</strong> be all lowercase (and will assert such) for the sake of better compatibility between mods.
+            If your damage event is generic, try coming up with as generalized a name as possible.
+            <para/>
+            If you wish to support multiple events, separate them with semicolon <c>;</c> like so: <c>yeeted;sent_to_shadow_realm;obliterated;deleted</c>
+            </summary>
+        </member>
+        <member name="P:AvatarStatExtender.Data.ReadOnlyAudioEntry.ResolvedCustomEvents">
+            <summary>
+            This list contains the evaluated and sanitized array resulting from <see cref="P:AvatarStatExtender.Data.ReadOnlyAudioEntry.CustomEventTypes"/>.
+            <para/>
+            <strong>This does NOT contain vanilla event names that may have been
+            manually typed in - those have been merged into <see cref="P:AvatarStatExtender.Data.ReadOnlyAudioEntry.EventType"/>!</strong>
+            </summary>
+        </member>
+        <member name="P:AvatarStatExtender.Data.ReadOnlyAudioEntry.Sounds">
+            <summary>
+            The list of sounds in this entry.
+            </summary>
+        </member>
+        <member name="P:AvatarStatExtender.Data.ReadOnlyAudioEntry.PitchRange">
+            <summary>
+            The range of pitch that automatic sound playing can use, (min, max).
+            </summary>
+        </member>
+        <member name="P:AvatarStatExtender.Data.ReadOnlyAudioEntry.Volume">
+            <summary>
+            The volume of this slider.
+            </summary>
+        </member>
+        <member name="P:AvatarStatExtender.Data.ReadOnlyAudioEntry.Mixer">
+            <summary>
+            The mixer that this should use when playing.
+            </summary>
+        </member>
+        <member name="P:AvatarStatExtender.Data.ReadOnlyAudioEntry.SoundFlags">
+            <summary>
+            How this should should be updated when playing.
+            </summary>
+        </member>
+        <member name="P:AvatarStatExtender.Data.ReadOnlyAudioEntry.OverrideTemplateAudioSource">
+            <summary>
+            If defined, this will override the template audio source used by default when playing sounds.
+            <para/>
+            This is a clone of the original template object.
+            </summary>
+        </member>
+        <member name="T:AvatarStatExtender.Data.ReadOnlyReferenceSpan`1">
+            <summary>
+            Provides a read only window into an array.
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="P:AvatarStatExtender.Data.ReadOnlyReferenceSpan`1.Length">
+            <summary>
+            The length of the array.
+            </summary>
+        </member>
+        <member name="P:AvatarStatExtender.Data.ReadOnlyReferenceSpan`1.Item(System.Int32)">
+            <summary>
+            Access an element of the array by its index.
+            </summary>
+            <param name="index"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AvatarStatExtender.Data.ReadOnlyReferenceSpan`1.#ctor(`0[])">
+            <summary>
+            Create a new wrapper around the provided array.
+            </summary>
+            <param name="array"></param>
+        </member>
+        <member name="M:AvatarStatExtender.Data.ReadOnlyReferenceSpan`1.IndexOf(`0)">
+            <summary>
+            Returns the numeric index of the given <paramref name="item"/> in this array, or <c>-1</c> if no such
+            item exist in this array.
+            </summary>
+            <param name="item"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AvatarStatExtender.Data.ReadOnlyReferenceSpan`1.GetEnumerator">
+            <inheritdoc/>
+        </member>
+        <member name="M:AvatarStatExtender.Data.ReadOnlyReferenceSpan`1.System#Collections#IEnumerable#GetEnumerator">
+            <inheritdoc/>
+        </member>
+        <member name="P:AvatarStatExtender.Data.SerializableAudioArray.Clips">
+            <summary>
+            A non-null reference to <see cref="F:AvatarStatExtender.Data.SerializableAudioArray.clips"/>.
+            </summary>
+        </member>
+        <member name="P:AvatarStatExtender.Data.SerializableAudioArray2D.Children">
+            <summary>
+            A non-null reference to <see cref="F:AvatarStatExtender.Data.SerializableAudioArray2D.children"/>.
+            </summary>
+        </member>
+        <member name="T:AvatarStatExtender.Data.SoundFlags">
+            <summary>
+            Controls how a sound is played.
+            </summary>
+        </member>
+        <member name="F:AvatarStatExtender.Data.SoundFlags.None">
+            <summary>
+            No unique behaviors.
+            </summary>
+        </member>
+        <member name="F:AvatarStatExtender.Data.SoundFlags.FollowEmitter">
+            <summary>
+            This sound must follow the object that it emits at. If not defined, the sound will "float" where it is emitted and never move.
+            </summary>
+        </member>
+        <member name="F:AvatarStatExtender.Data.SoundFlags.PitchShift">
+            <summary>
+            This sound shifts its pitch with the game's timescale upon creation. See also: <see cref="F:AvatarStatExtender.Data.SoundFlags.RealtimePitchShift"/>.
+            <para/>
+            This flag is implicitly set by <see cref="F:AvatarStatExtender.Data.SoundFlags.RealtimePitchShift"/>.
+            </summary>
+        </member>
+        <member name="F:AvatarStatExtender.Data.SoundFlags.RealtimePitchShift">
+            <summary>
+            This sound shifts its pitch with in-game timescaling in real time, rather than finding the timescale on creation and keeping that pitch (which
+            sounds in game do by default).
+            <para/>
+            If set, <see cref="F:AvatarStatExtender.Data.SoundFlags.PitchShift"/> is also implicitly treated as set.
+            </summary>
+        </member>
+        <member name="T:AvatarStatExtender.Components.JumpTracker">
+            <summary>
+            Stores values relating to jumping. This is used to keep track of if the player can jump, so that the jump boost
+            stat knows whether or not it can apply.
+            </summary>
+        </member>
+        <member name="M:AvatarStatExtender.Components.JumpTracker.#ctor(System.IntPtr)">
+            <summary>
+            Internal constructor for il2cpp. This creates a managed representation of a Unity object
+            being stored in unmanaged memory via the provided pointer.
+            </summary>
+            <param name="this">The location of the unmanaged object that this represents.</param>
+        </member>
+        <member name="M:AvatarStatExtender.Components.JumpTracker.MarkPlayerOnGround(System.Boolean)">
+            <summary>
+            Tell the system that the player is on the ground.
+            </summary>
+            <param name="isGrounded"></param>
+        </member>
+        <member name="M:AvatarStatExtender.Components.JumpTracker.TryJump(System.Boolean)">
+            <summary>
+            Tries to switch this object into the state where it thinks it has jumped.
+            Returns true if the jump force should be applied, false if not.
+            </summary>
+            <param name="isJumpButtonPressed"></param>
+            <returns></returns>
+        </member>
+        <member name="T:AvatarStatExtender.Components.RealtimeSoundDriver">
+            <summary>
+            The realtime sound driver handles moving 3D sounds in realtime, changing their pitch in realtime with the timescale,
+            and disposing of the sound once it has finished playing.
+            </summary>
+        </member>
+        <member name="M:AvatarStatExtender.Components.RealtimeSoundDriver.#ctor(System.IntPtr)">
+            <summary>
+            Internal constructor for il2cpp. This creates a managed representation of a Unity object
+            being stored in unmanaged memory via the provided pointer.
+            </summary>
+            <param name="this">The location of the unmanaged object that this represents.</param>
+        </member>
+        <member name="F:AvatarStatExtender.Components.RealtimeSoundDriver.pitchShiftInRealtime">
+            <summary>
+            If true, this sound will match its pitch to the timescale in real time.
+            </summary>
+        </member>
+        <member name="F:AvatarStatExtender.Components.RealtimeSoundDriver.followParent">
+            <summary>
+            If true, this sound will update its transform to be at its parent transform, 
+            plus the <see cref="P:AvatarStatExtender.Components.RealtimeSoundDriver.LocalOffset"/> and <see cref="P:AvatarStatExtender.Components.RealtimeSoundDriver.GlobalOffset"/>
+            </summary>
+        </member>
+        <member name="P:AvatarStatExtender.Components.RealtimeSoundDriver.LocalOffset">
+            <summary>
+            A local position offset for the transform. This is applied first.
+            <para/>
+            This only works if you have it set to <see cref="F:AvatarStatExtender.Components.RealtimeSoundDriver.followParent"/>.
+            </summary>
+        </member>
+        <member name="P:AvatarStatExtender.Components.RealtimeSoundDriver.GlobalOffset">
+            <summary>
+            A global position offset for the transform. This is applied after the local transform.
+            Note that this has a slight performance cost for nested sounds, as it must use matrix math
+            to evaluate the new position.
+            <para/>
+            This only works if you have it set to <see cref="F:AvatarStatExtender.Components.RealtimeSoundDriver.followParent"/>.
+            </summary>
+        </member>
+        <member name="M:AvatarStatExtender.Components.RealtimeSoundDriver.StartDriving(UnityEngine.AudioSource,System.Boolean,System.Boolean)">
+            <summary>
+            Adds a component to a sound emitter and sets up its properties.
+            </summary>
+            <param name="sound">The object emitting the sound.</param>
+            <param name="followParent">If true, this will follow its parent.</param>
+            <param name="pitchShiftInRealtime">Whether or not the pitch should be driven in real time.</param>
+        </member>
+        <member name="T:AvatarStatExtender.Log">
+            <summary>
+            Provides a wider variety of logging methods for convenience.
+            </summary>
+        </member>
+        <member name="M:AvatarStatExtender.Log.Info(System.Object)">
+            <summary>
+            Log a standard message in white text.
+            </summary>
+            <param name="msg"></param>
+        </member>
+        <member name="M:AvatarStatExtender.Log.Info(System.String)">
+            <summary>
+            Log a standard message in white text.
+            </summary>
+            <param name="msg"></param>
+        </member>
+        <member name="M:AvatarStatExtender.Log.Warn(System.Object)">
+            <summary>
+            Log a warning message in yellow text.
+            </summary>
+            <param name="msg"></param>
+        </member>
+        <member name="M:AvatarStatExtender.Log.Warn(System.String)">
+            <summary>
+            Log a warning message in yellow text.
+            </summary>
+            <param name="msg"></param>
+        </member>
+        <member name="M:AvatarStatExtender.Log.Error(System.Object)">
+            <summary>
+            Log an error message in red text.
+            </summary>
+            <param name="msg"></param>
+        </member>
+        <member name="M:AvatarStatExtender.Log.Error(System.String)">
+            <summary>
+            Log an error message in red text.
+            </summary>
+            <param name="msg"></param>
+        </member>
+        <member name="M:AvatarStatExtender.Log.Debug(System.Object)">
+            <summary>
+            Log a debugging message in gray text. Always prefixed with [DEBUG]
+            </summary>
+            <param name="msg"></param>
+        </member>
+        <member name="M:AvatarStatExtender.Log.Debug(System.String)">
+            <summary>
+            Log a debugging message in gray text. Always prefixed with [DEBUG]
+            </summary>
+            <param name="msg"></param>
+        </member>
+        <member name="M:AvatarStatExtender.Log.Trace(System.Object)">
+            <summary>
+            If <see cref="P:AvatarStatExtender.Prefs.TraceLogging"/> is enabled, write a trace message in dark gray text. Always prefixed with [TRACE].
+            </summary>
+            <param name="msg"></param>
+        </member>
+        <member name="M:AvatarStatExtender.Log.Trace(System.String)">
+            <summary>
+            If <see cref="P:AvatarStatExtender.Prefs.TraceLogging"/> is enabled, write a trace message in dark gray text. Always prefixed with [TRACE].
+            </summary>
+            <param name="msg"></param>
+        </member>
+        <member name="T:AvatarStatExtender.Tools.Assets.AssetLocator">
+            <summary>
+            Functions that assist with loading assets or finding information about them.
+            </summary>
+        </member>
+        <member name="M:AvatarStatExtender.Tools.Assets.AssetLocator.IsPrefabAvatar(Il2CppSLZ.VRMK.Avatar)">
+            <summary>
+            Analyzes the provided avatar to determine if it is a prefab. To do so, it checks to see if its scene is
+            a null scene.
+            </summary>
+            <param name="avatar"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AvatarStatExtender.Tools.Assets.AssetLocator.BruteForceFindCrateOfAvatar(Il2CppSLZ.VRMK.Avatar)">
+            <summary>
+            An alternative method to find an avatar's crate by searching the entire warehouse.
+            <para/>
+            While not ideal, this is done because of the async nature of crate loading; the <see cref="!:RigManager"/>
+            does not have its <see cref="!:RigManager.AvatarCrate"/> property set early enough due to it being
+            updated in a coroutine, so the crate is set to the default (polyblank) rather than the current avatar
+            when querying it.
+            </summary>
+            <param name="avatar"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AvatarStatExtender.Tools.Assets.AssetLocator.GetOriginalPrefab(Il2CppSLZ.VRMK.Avatar)">
+            <summary>
+            Provided with an avatar instance, this will return the original prefab for this avatar that all
+            future instances are cloned from. Returns null if it cannot find the prefab.
+            </summary>
+            <param name="avatar"></param>
+            <returns></returns>
+        </member>
+        <member name="T:AvatarStatExtender.Tools.AvatarStatCalculationExtension">
+            <summary>
+            Provides extension methods used to calculate the stats of avatars.
+            </summary>
+        </member>
+        <member name="M:AvatarStatExtender.Tools.AvatarStatCalculationExtension.GetPositionBetween(UnityEngine.Animator,UnityEngine.HumanBodyBones,UnityEngine.HumanBodyBones)">
+            <summary>
+            Returns the exact position between two human bones.
+            </summary>
+            <param name="animator"></param>
+            <param name="first"></param>
+            <param name="second"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AvatarStatExtender.Tools.AvatarStatCalculationExtension.EyePosition(Il2CppSLZ.VRMK.Avatar)">
+            <summary>
+            Returns the eye position of this avatar, depending on whether or not an eye center override is available.
+            </summary>
+            <param name="avatar"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AvatarStatExtender.Tools.AvatarStatCalculationExtension.GetEyeHeight(Il2CppSLZ.VRMK.Avatar)">
+            <summary>
+            Returns the height of the eyes on this avatar.
+            </summary>
+            <param name="avatar"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AvatarStatExtender.Tools.AvatarStatCalculationExtension.CanComputeStats(Il2CppSLZ.VRMK.Avatar,System.String@)">
+            <summary>
+            Returns whether or not the avatar is in a state where it can be computed.
+            <para/>
+            This is in line with limitations imposed by Unity, which namely prevents scripts from accessing humanoid bones
+            if the animator is disabled. This also performs other sanity checks.
+            <para/>
+            If this method returns <see langword="false"/>, the <paramref name="errorMessage"/> parameter can be used
+            to log appropriately.
+            </summary>
+            <param name="avatar">The avatar to test.</param>
+            <param name="errorMessage">If non-null, this is an error message describing why it cannot be edited.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AvatarStatExtender.Tools.AvatarStatCalculationExtension.ComputeAllStats(Il2CppSLZ.VRMK.Avatar,AvatarStatExtender.Tools.AvatarStatCalculationExtension.AvatarMasses@,AvatarStatExtender.Tools.AvatarStatCalculationExtension.AvatarStats@)">
+            <summary>
+            Provides the avatar's computed mass and stats.
+            </summary>
+            <param name="avatar">The avatar to get information on.</param>
+            <param name="mass">The masses of every body part on this avatar.</param>
+            <param name="stats">The stats computed from the avatar's body.</param>
+        </member>
+        <member name="M:AvatarStatExtender.Tools.AvatarStatCalculationExtension.ComputeMass(Il2CppSLZ.VRMK.Avatar,AvatarStatExtender.Tools.AvatarStatCalculationExtension.AvatarComputationProperties@,System.Single)">
+            <summary>
+            Utilizes adapted vanilla x86 code to compute the mass of an avatar based on its body proportions.
+            </summary>
+            <param name="avatar">The avatar to compute the mass of.</param>
+            <param name="additionalInfo">This struct contains information that is relevant to avatar stat computations.</param>
+            <param name="normalizeTo82">This is a correction factor and is never changed by the game; it is always 0.5 in vanilla calculations.</param>
+            <returns></returns>
+            <exception cref="T:System.NullReferenceException"></exception>
+        </member>
+        <member name="M:AvatarStatExtender.Tools.AvatarStatCalculationExtension.ComputeBaseStats(Il2CppSLZ.VRMK.Avatar,AvatarStatExtender.Tools.AvatarStatCalculationExtension.AvatarMasses,AvatarStatExtender.Tools.AvatarStatCalculationExtension.AvatarComputationProperties)">
+            <summary>
+            Computes the base stats of the avatar. Note that this requires the masses and additional info packages, both of which
+            are acquired through <see cref="M:AvatarStatExtender.Tools.AvatarStatCalculationExtension.ComputeMass(Il2CppSLZ.VRMK.Avatar,AvatarStatExtender.Tools.AvatarStatCalculationExtension.AvatarComputationProperties@,System.Single)"/>.
+            </summary>
+            <param name="avatar"></param>
+            <param name="masses"></param>
+            <param name="additionalInfo"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AvatarStatExtender.Tools.AvatarStatCalculationExtension.AverageTotalRadius(Il2CppSLZ.VRMK.Avatar.SoftEllipse[])">
+            <summary>
+            Adds the X and Z radii of the provided soft ellipses, and then divides by the amount of added radii.
+            </summary>
+            <param name="ellipses"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AvatarStatExtender.Tools.AvatarStatCalculationExtension.GrandTotalRadius(Il2CppSLZ.VRMK.Avatar.SoftEllipse[])">
+            <summary>
+            Adds the X and Z radii of the provided soft ellipses.
+            </summary>
+            <param name="ellipses"></param>
+            <returns></returns>
+        </member>
+        <member name="T:AvatarStatExtender.Tools.AvatarStatCalculationExtension.AvatarMasses">
+            <summary>
+            The masses of every singular body part (that is, the arm/leg mass is the mass of only one arm or leg), as well as the total mass.
+            </summary>
+        </member>
+        <member name="F:AvatarStatExtender.Tools.AvatarStatCalculationExtension.AvatarMasses.massTotal">
+            <summary>
+            The total mass of the avatar.
+            </summary>
+        </member>
+        <member name="F:AvatarStatExtender.Tools.AvatarStatCalculationExtension.AvatarMasses.massPelvis">
+            <summary>
+            The mass of the avatar's lower torso.
+            </summary>
+        </member>
+        <member name="F:AvatarStatExtender.Tools.AvatarStatCalculationExtension.AvatarMasses.massChest">
+            <summary>
+            The mass of the avatar's upper torso.
+            </summary>
+        </member>
+        <member name="F:AvatarStatExtender.Tools.AvatarStatCalculationExtension.AvatarMasses.massArm">
+            <summary>
+            The mass of one arm on this avatar.
+            </summary>
+        </member>
+        <member name="F:AvatarStatExtender.Tools.AvatarStatCalculationExtension.AvatarMasses.massLeg">
+            <summary>
+            The mass of one leg on this avatar.
+            </summary>
+        </member>
+        <member name="F:AvatarStatExtender.Tools.AvatarStatCalculationExtension.AvatarMasses.massBody">
+            <summary>
+            The mass of the entire body, excluding the head.
+            </summary>
+        </member>
+        <member name="F:AvatarStatExtender.Tools.AvatarStatCalculationExtension.AvatarMasses.massHead">
+            <summary>
+            The mass of this avatar's head.
+            </summary>
+        </member>
+        <member name="M:AvatarStatExtender.Tools.AvatarStatCalculationExtension.AvatarMasses.ToString">
+            <summary>
+            Outputs all masses in a clean string format.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:AvatarStatExtender.Tools.AvatarStatCalculationExtension.AvatarStats">
+            <summary>
+            The stats of an avatar that are computed from its mass and other bodily information.
+            </summary>
+        </member>
+        <member name="F:AvatarStatExtender.Tools.AvatarStatCalculationExtension.AvatarStats.agility">
+            <summary>
+            This avatar's ability to accelerate or decelerate.
+            </summary>
+        </member>
+        <member name="F:AvatarStatExtender.Tools.AvatarStatCalculationExtension.AvatarStats.speed">
+            <summary>
+            The maximum run speed of this avatar in meters per second.
+            </summary>
+        </member>
+        <member name="F:AvatarStatExtender.Tools.AvatarStatCalculationExtension.AvatarStats.strengthUpper">
+            <summary>
+            The upper body strength of this avatar. Measured in an arbitrary unit.
+            </summary>
+        </member>
+        <member name="F:AvatarStatExtender.Tools.AvatarStatCalculationExtension.AvatarStats.strengthLower">
+            <summary>
+            The lower body strength of this avatar. Measured in an arbitrary unit.
+            </summary>
+        </member>
+        <member name="F:AvatarStatExtender.Tools.AvatarStatCalculationExtension.AvatarStats.strengthGrip">
+            <summary>
+            The grip strength of the avatar. Where this is used is not entirely known as it is distinctly separate
+            from the upper body strength.
+            </summary>
+        </member>
+        <member name="F:AvatarStatExtender.Tools.AvatarStatCalculationExtension.AvatarStats.vitality">
+            <summary>
+            The avatar's health.
+            </summary>
+        </member>
+        <member name="F:AvatarStatExtender.Tools.AvatarStatCalculationExtension.AvatarStats.intelligence">
+            <summary>
+            How big your forehead is. Literally. That's what this stat measures. I'm not joking.
+            </summary>
+        </member>
+        <member name="M:AvatarStatExtender.Tools.AvatarStatCalculationExtension.AvatarStats.ToString">
+            <summary>
+            Output these stats to a cleanly formatted string.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:AvatarStatExtender.Tools.AvatarStatCalculationExtension.AvatarComputationProperties">
+            <summary>
+            Additional information that is associated with avatars, used during internal computations.
+            </summary>
+        </member>
+        <member name="F:AvatarStatExtender.Tools.AvatarStatCalculationExtension.AvatarComputationProperties.eyeHeight">
+            <summary>
+            The height of the avatar's eyes relative to the origin of the avatar object.
+            </summary>
+        </member>
+        <member name="F:AvatarStatExtender.Tools.AvatarStatCalculationExtension.AvatarComputationProperties.t1HeightPercent">
+            <summary>
+            The height of the T1 spine section.
+            </summary>
+        </member>
+        <member name="F:AvatarStatExtender.Tools.AvatarStatCalculationExtension.AvatarComputationProperties.sternumOffset">
+            <summary>
+            The offset of the sternum relative to the chest bone.
+            </summary>
+        </member>
+        <member name="F:AvatarStatExtender.Tools.AvatarStatCalculationExtension.AvatarComputationProperties.sternumOffsetPercent">
+            <summary>
+            <see cref="F:AvatarStatExtender.Tools.AvatarStatCalculationExtension.AvatarComputationProperties.sternumOffset"/> divided by <see cref="F:AvatarStatExtender.Tools.AvatarStatCalculationExtension.AvatarComputationProperties.eyeHeight"/>.
+            </summary>
+        </member>
+        <member name="F:AvatarStatExtender.Tools.AvatarStatCalculationExtension.AvatarComputationProperties.hipOffset">
+            <summary>
+            The offset of the hip bones relative to the center point between the two upper leg bones.
+            </summary>
+        </member>
+        <member name="F:AvatarStatExtender.Tools.AvatarStatCalculationExtension.AvatarComputationProperties.hipOffsetPercent">
+            <summary>
+            <see cref="F:AvatarStatExtender.Tools.AvatarStatCalculationExtension.AvatarComputationProperties.hipOffset"/> divided by <see cref="F:AvatarStatExtender.Tools.AvatarStatCalculationExtension.AvatarComputationProperties.eyeHeight"/>
+            </summary>
+        </member>
+        <member name="F:AvatarStatExtender.Tools.AvatarStatCalculationExtension.AvatarComputationProperties.hipsPosition">
+            <summary>
+            The position of the hip bone relative to the origin of the avatar.
+            </summary>
+        </member>
+        <member name="F:AvatarStatExtender.Tools.AvatarStatCalculationExtension.AvatarComputationProperties.sacrumHeightPercent">
+            <summary>
+            i forgor:skull:
+            </summary>
+        </member>
+        <member name="F:AvatarStatExtender.Tools.AvatarStatCalculationExtension.AvatarComputationProperties.upperArmLength">
+            <summary>
+            The length of the avatar's upper arm bone. This is specifically sampled from the right arm, and assumes the arms are symmetrical.
+            </summary>
+        </member>
+        <member name="F:AvatarStatExtender.Tools.AvatarStatCalculationExtension.AvatarComputationProperties.upperLegLength">
+            <summary>
+            The length of the avatar's upper leg bone. This is specifically sampled from the right arm, and assumes the arms are symmetrical.
+            </summary>
+        </member>
+        <member name="F:AvatarStatExtender.Tools.AvatarStatCalculationExtension.AvatarComputationProperties.lowerArmLength">
+            <summary>
+            The length of the avatar's forearm. This is specifically sampled from the right arm, and assumes the arms are symmetrical.
+            </summary>
+        </member>
+        <member name="F:AvatarStatExtender.Tools.AvatarStatCalculationExtension.AvatarComputationProperties.lowerLegLength">
+            <summary>
+            The length of the avatar's lower leg. This is specifically sampled from the right arm, and assumes the arms are symmetrical.
+            </summary>
+        </member>
+        <member name="F:AvatarStatExtender.Tools.AvatarStatCalculationExtension.AvatarComputationProperties.chestToShoulderPerc">
+            <summary>
+            The distance from the chest bone to the shoulder bone, divided by <see cref="F:AvatarStatExtender.Tools.AvatarStatCalculationExtension.AvatarComputationProperties.eyeHeight"/>.
+            </summary>
+        </member>
+        <member name="F:AvatarStatExtender.Tools.AvatarStatCalculationExtension.AvatarComputationProperties.handSizeMult">
+            <summary>
+            A factor based on the distance between all fingers, measuring (roughly) an area that represents the hand's size.
+            </summary>
+        </member>
+        <member name="T:AvatarStatExtender.Tools.ListTools">
+            <summary>
+            Provides list utilities.
+            </summary>
+        </member>
+        <member name="M:AvatarStatExtender.Tools.ListTools.EmptyReadOnly``1">
+            <summary>
+            Returns an immutably read-only list, in that it is not a wrapper; it is truly read only,
+            and flat out <em>doesn't have</em> an inner collection.
+            <para/>
+            This qualifies as <see cref="T:System.Collections.Generic.IList`1"/> and <see cref="T:System.Collections.Generic.IReadOnlyList`1"/> together.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="T:AvatarStatExtender.Tools.PlayerObjectExtensions">
+            <summary>
+            Tools to help with player related things.
+            </summary>
+        </member>
+        <member name="M:AvatarStatExtender.Tools.PlayerObjectExtensions.GetRemotePlayers">
+            <summary>
+            Returns the <see cref="T:Il2CppSLZ.Marrow.RigManager"/>s belonging to all other players in a multiplayer server.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:AvatarStatExtender.Tools.PlayerObjectExtensions.GetAllPlayers">
+            <summary>
+            Returns every player in the current scene, guaranteed to start with the local player. To get the local player,
+            use <see cref="P:XansTools.Data.Player.RigMgr"/>, not this.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:AvatarStatExtender.Tools.PlayerObjectExtensions.GetRigManager(Il2CppSLZ.VRMK.Avatar)">
+            <summary>
+            Returns the <see cref="T:Il2CppSLZ.Marrow.RigManager"/> associated with the provided avatar.
+            </summary>
+            <param name="avatar"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AvatarStatExtender.Tools.PlayerObjectExtensions.GetAllUniqueActiveAvatarPrefabs">
+            <summary>
+            Returns a list of all avatar <strong>prefabs</strong> that have been loaded
+            into this scene, with multiplayer in mind. If two players are using the same avatar,
+            then that avatar will only appear once in the result.
+            <para/>
+            This always begins with the local player's avatar.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:AvatarStatExtender.Tools.PlayerObjectExtensions.GetAllActiveAvatars">
+            <summary>
+            Returns a list of all avatars that are currently present in the scene that belong to players.
+            <para/>
+            This always begins with the local player's avatar.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:AvatarStatExtender.Tools.PlayerObjectExtensions.GetHealth(Il2CppSLZ.VRMK.Avatar)">
+            <summary>
+            Returns the health belonging to this avatar, by accessing the <see cref="T:Il2CppSLZ.Marrow.RigManager"/> (its parent object)
+            and then resolving its <see cref="P:Il2CppSLZ.Marrow.RigManager.health"/> as <see cref="T:Il2CppSLZ.Marrow.Player_Health"/>.
+            </summary>
+            <param name="avatar"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AvatarStatExtender.Tools.PlayerObjectExtensions.GetAvatar(Il2CppSLZ.Marrow.Player_Health)">
+            <summary>
+            Returns the avatar that this health belongs to, by grabbing it off of the <see cref="T:Il2CppSLZ.Marrow.RigManager"/>.
+            </summary>
+            <param name="health"></param>
+            <returns></returns>
+        </member>
+        <member name="T:AvatarStatExtender.Tools.ReadOnlyHashSet`1">
+            <summary>
+            A substitution for the native ImmutableHashSet type, which is not available.
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="P:AvatarStatExtender.Tools.ReadOnlyHashSet`1.Count">
+            <inheritdoc/>
+        </member>
+        <member name="P:AvatarStatExtender.Tools.ReadOnlyHashSet`1.IsReadOnly">
+            <inheritdoc/>
+        </member>
+        <member name="M:AvatarStatExtender.Tools.ReadOnlyHashSet`1.#ctor">
+            <summary>
+            Create a new empty immutable set.
+            </summary>
+        </member>
+        <member name="M:AvatarStatExtender.Tools.ReadOnlyHashSet`1.#ctor(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            Create a new immutable set wrapping the provided collection.
+            </summary>
+            <param name="set"></param>
+        </member>
+        <member name="M:AvatarStatExtender.Tools.ReadOnlyHashSet`1.ContainsAny(`0[])">
+            <summary>
+            Returns true if this set contains at least one of the items in the provided array.
+            </summary>
+            <param name="of"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AvatarStatExtender.Tools.ReadOnlyHashSet`1.Add(`0)">
+            <inheritdoc/>
+        </member>
+        <member name="M:AvatarStatExtender.Tools.ReadOnlyHashSet`1.UnionWith(System.Collections.Generic.IEnumerable{`0})">
+            <inheritdoc/>
+        </member>
+        <member name="M:AvatarStatExtender.Tools.ReadOnlyHashSet`1.IntersectWith(System.Collections.Generic.IEnumerable{`0})">
+            <inheritdoc/>
+        </member>
+        <member name="M:AvatarStatExtender.Tools.ReadOnlyHashSet`1.ExceptWith(System.Collections.Generic.IEnumerable{`0})">
+            <inheritdoc/>
+        </member>
+        <member name="M:AvatarStatExtender.Tools.ReadOnlyHashSet`1.SymmetricExceptWith(System.Collections.Generic.IEnumerable{`0})">
+            <inheritdoc/>
+        </member>
+        <member name="M:AvatarStatExtender.Tools.ReadOnlyHashSet`1.IsSubsetOf(System.Collections.Generic.IEnumerable{`0})">
+            <inheritdoc/>
+        </member>
+        <member name="M:AvatarStatExtender.Tools.ReadOnlyHashSet`1.IsSupersetOf(System.Collections.Generic.IEnumerable{`0})">
+            <inheritdoc/>
+        </member>
+        <member name="M:AvatarStatExtender.Tools.ReadOnlyHashSet`1.IsProperSupersetOf(System.Collections.Generic.IEnumerable{`0})">
+            <inheritdoc/>
+        </member>
+        <member name="M:AvatarStatExtender.Tools.ReadOnlyHashSet`1.IsProperSubsetOf(System.Collections.Generic.IEnumerable{`0})">
+            <inheritdoc/>
+        </member>
+        <member name="M:AvatarStatExtender.Tools.ReadOnlyHashSet`1.Overlaps(System.Collections.Generic.IEnumerable{`0})">
+            <inheritdoc/>
+        </member>
+        <member name="M:AvatarStatExtender.Tools.ReadOnlyHashSet`1.SetEquals(System.Collections.Generic.IEnumerable{`0})">
+            <inheritdoc/>
+        </member>
+        <member name="M:AvatarStatExtender.Tools.ReadOnlyHashSet`1.System#Collections#Generic#ICollection{T}#Add(`0)">
+            <inheritdoc/>
+        </member>
+        <member name="M:AvatarStatExtender.Tools.ReadOnlyHashSet`1.Clear">
+            <inheritdoc/>
+        </member>
+        <member name="M:AvatarStatExtender.Tools.ReadOnlyHashSet`1.Contains(`0)">
+            <inheritdoc/>
+        </member>
+        <member name="M:AvatarStatExtender.Tools.ReadOnlyHashSet`1.CopyTo(`0[],System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:AvatarStatExtender.Tools.ReadOnlyHashSet`1.Remove(`0)">
+            <inheritdoc/>
+        </member>
+        <member name="M:AvatarStatExtender.Tools.ReadOnlyHashSet`1.GetEnumerator">
+            <inheritdoc/>
+        </member>
+        <member name="M:AvatarStatExtender.Tools.ReadOnlyHashSet`1.System#Collections#IEnumerable#GetEnumerator">
+            <inheritdoc/>
+        </member>
+        <member name="T:AvatarStatExtender.Tools.SoundBlockNameSanitizer">
+            <summary>
+            Verifies and sanitizes the names of custom sound events.
+            </summary>
+        </member>
+        <member name="F:AvatarStatExtender.Tools.SoundBlockNameSanitizer.SOUND_REGEX">
+            <summary>
+            This regex matches sound event IDs.
+            <para/>
+            <c>[a-z0-9_\-\.]+(?:(?:\:)[a-z0-9_\-\.]+)?</c>
+            </summary>
+        </member>
+        <member name="M:AvatarStatExtender.Tools.SoundBlockNameSanitizer.IsSane(System.String)">
+            <summary>
+            Takes a single sound (<em>not</em> a semicolon separated list!) and returns whether or not that name is valid.
+            </summary>
+            <param name="unfilteredSingle"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AvatarStatExtender.Tools.SoundBlockNameSanitizer.GetSanitizedEventList(System.String)">
+            <summary>
+            Provided with the raw, unfiltered string for a sound's event name(s), this will split it into
+            an array only containing valid sounds as per the rules of sound event formatting.
+            <para/>
+            You can use <see href="https://regexr.com"/> to explain the regex (see <see cref="F:AvatarStatExtender.Tools.SoundBlockNameSanitizer.SOUND_REGEX"/>) to you. If you are in a future
+            where <see href="https://regexr.com"/> no longer exists, God help you.
+            </summary>
+            <param name="unfiltered"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AvatarStatExtender.Tools.SoundBlockNameSanitizer.GetSanitizedEventList(System.String[])">
+            <summary>
+            Provided with the raw, unfiltered string for a sound's event name(s), this will split it into
+            an array only containing valid sounds as per the rules of sound event formatting.
+            <para/>
+            You can use <see href="https://regexr.com"/> to explain the regex (see <see cref="F:AvatarStatExtender.Tools.SoundBlockNameSanitizer.SOUND_REGEX"/>) to you. If you are in a future
+            where <see href="https://regexr.com"/> no longer exists, God help you.
+            </summary>
+            <param name="names"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AvatarStatExtender.Tools.SoundBlockNameSanitizer.GetSanitizedEventListJoined(System.String)">
+            <summary>
+            Provided with the raw, unfiltered string for a sound's event name(s), this will return
+            an appropriately filtered list. Invalid entries will be removed entirely.
+            </summary>
+            <param name="unfiltered"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AvatarStatExtender.Tools.SoundBlockNameSanitizer.CreateStringAndEnumMix(System.String,System.String[]@,AvatarStatExtender.Data.AudioEventType@)">
+            <summary>
+            Provided with an unfiltered sound event list, this will translate it into a set of sanitized/filtered names,
+            and vanilla enums that might have been typed into the list manually.
+            </summary>
+            <param name="unfiltered"></param>
+            <param name="customs"></param>
+            <param name="enums"></param>
+        </member>
+        <member name="M:AvatarStatExtender.Tools.SoundBlockNameSanitizer.CreateStringAndEnumMix(System.String[],System.String[]@,AvatarStatExtender.Data.AudioEventType@)">
+            <summary>
+            Provided with an unfiltered sound event list, this will translate it into a set of sanitized/filtered names,
+            and vanilla enums that might have been typed into the list manually.
+            </summary>
+            <param name="unfilteredArray"></param>
+            <param name="customs"></param>
+            <param name="enums"></param>
+        </member>
+        <member name="M:AvatarStatExtender.Tools.SoundBlockNameSanitizer.CreateStringAndEnumMix(System.String[]@,AvatarStatExtender.Data.AudioEventType@)">
+            <summary>
+            Common code for the other two similarly named methods.
+            </summary>
+            <param name="customs"></param>
+            <param name="enums"></param>
+        </member>
+        <member name="T:AvatarStatExtender.Tools.SoundPlayerSystem">
+            <summary>
+            This class plays sounds arbitrarily.
+            </summary>
+        </member>
+        <member name="M:AvatarStatExtender.Tools.SoundPlayerSystem.PlaySound(UnityEngine.Transform,UnityEngine.AudioClip,System.Single,System.Single,System.Boolean,AvatarStatExtender.Data.SoundFlags,UnityEngine.Audio.AudioMixerGroup)">
+            <summary>
+            Play the provided <see cref="T:UnityEngine.AudioClip"/> using the provided settings. A new <see cref="T:UnityEngine.GameObject"/> is created for this sound, which
+            is returned from the method. Note that a component, <see cref="T:AvatarStatExtender.Components.RealtimeSoundDriver"/>, is attached, which may set the object's position
+            every frame.
+            </summary>
+            <param name="on">The transform to play the sound at.</param>
+            <param name="sound">The sound to play.</param>
+            <param name="volume">The volume of the sound, from 0 to 2.</param>
+            <param name="pitch">The pitch of the sound, which also affects its speed.</param>
+            <param name="playAs2D">If true, the audio plays in 2D (directly out of the speakers) instead of at a position in the world.</param>
+            <param name="flags">Flags that dictate how the sound behaves while playing.</param>
+            <param name="mixer">The mixer to play on. If null, this uses <see cref="!:Audio.SFXMixer"/>.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AvatarStatExtender.Tools.SoundPlayerSystem.PlaySound(UnityEngine.Transform,AvatarStatExtender.API.PlayableSoundData,UnityEngine.AudioSource)">
+            <summary>
+            Play the provided <see cref="T:AvatarStatExtender.API.PlayableSoundData"/> using its included settings. A new <see cref="T:UnityEngine.GameObject"/> is created for this sound, which
+            is returned from the method. Note that a component, <see cref="T:AvatarStatExtender.Components.RealtimeSoundDriver"/>, is attached, which may set the object's position
+            every frame depending on your <paramref name="flags"/>.
+            <para/>
+            While not ordinarily supported, the <paramref name="template"/> <em>can</em> make the sound loop. The <see cref="T:AvatarStatExtender.Components.RealtimeSoundDriver"/> destroys
+            the sound on the Update() that it's not playing, though.
+            </summary>
+            <param name="on">The transform to play the sound at.</param>
+            <param name="sound">The sound to play.</param>
+            <param name="flags">Flags that dictate how the sound behaves while playing.</param>
+            <param name="mixer">The mixer to play on. If null, this uses <see cref="!:Audio.SFXMixer"/>.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AvatarStatExtender.Tools.SoundPlayerSystem.SetupDefaultNearbyCurves(UnityEngine.AudioSource,System.Boolean)">
+            <summary>
+            This method edits the curves of an audiosource such that it plays using the preset "Nearby Audio Source" or "Global Source" sound
+            types used in the code. It originally existed in my private Chimera mod.
+            </summary>
+            <param name="src"></param>
+            <param name="isPlayingAs2D"></param>
+        </member>
+        <member name="T:AvatarStatExtender.Tools.StatMarshaller">
+            <summary>
+            The core class responsible for performing changes to the avatar information.
+            </summary>
+        </member>
+        <member name="M:AvatarStatExtender.Tools.Tools.FormatPercentage(System.Single,System.Int32)">
+            <summary>
+            Identical to using C#'s built in <c>P</c> format option, but this doesn't put a space between the number and the %.
+            </summary>
+            <param name="value"></param>
+            <param name="digits"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AvatarStatExtender.Tools.Tools.ResizeArrayDefault``1(``0[]@,System.Int32,``0)">
+            <summary>
+            Identical to <see cref="M:System.Array.Resize``1(``0[]@,System.Int32)"/> but this will fill in
+            additional space with the provided value (<paramref name="fillWith"/>) if the
+            array is expanded.
+            </summary>	
+        </member>
+        <member name="P:AvatarStatExtender.Tools.XPlat.IsQuestie">
+            <summary>
+            True if this user is running on an Oculus Quest
+            </summary>
+        </member>
+        <member name="T:AvatarExtendedAudioContainer">
+            <summary>
+            This class contains audio variants for various assorted events. Some events are built in, but custom events are supported too.
+            </summary>
+        </member>
+        <member name="F:AvatarExtendedAudioContainer.names">
+            <summary>
+            The names of each audio set.
+            <para/>
+            <strong>MODDERS, DO NOT USE THIS.</strong> Use <see cref="M:AvatarExtendedAudioContainer.GetEntries"/> instead.
+            </summary>
+        </member>
+        <member name="F:AvatarExtendedAudioContainer.sounds">
+            <summary>
+            The sounds array that exists, per set, containing audio variants. This uses a Bonelab existing type for compatibility.
+            <para/>
+            <strong>MODDERS, DO NOT USE THIS.</strong> Use <see cref="M:AvatarExtendedAudioContainer.GetEntries"/> instead.
+            </summary>
+            <remarks>
+            This has to use <see cref="T:AvatarStatExtender.Data.SerializableAudioArray"/> to work around the fact that Unity doesn't serialize multilevel/jagged arrays.
+            </remarks>
+        </member>
+        <member name="F:AvatarExtendedAudioContainer.allOfTheSounds">
+            <summary>
+            Part one of a two part abyssmal hack so my fucking audio can be saved god why did slz have to use il2cpp
+            <para/>
+            Do not use this directly, this would be private or internal but has to be public because of <c>s e r i a l i z a t i o n _ l i m i t a t i o n s</c>
+            with the field injector. Modify <see cref="F:AvatarExtendedAudioContainer.sounds"/> instead, then call <see cref="M:AvatarExtendedAudioContainer.Sounds2DToAbyssmalMappedArray"/> to apply it here.
+            </summary>
+        </member>
+        <member name="F:AvatarExtendedAudioContainer.lengthsOfEachSegment">
+            <summary>
+            Part two of a two part abyssmal hack so my fucking audio can be saved god why did slz have to use il2cpp
+            <para/>
+            Do not use this directly, this would be private or internal but has to be public because of <c>s e r i a l i z a t i o n _ l i m i t a t i o n s</c>
+            with the field injector. Modify <see cref="F:AvatarExtendedAudioContainer.sounds"/> instead, then call <see cref="M:AvatarExtendedAudioContainer.Sounds2DToAbyssmalMappedArray"/> to apply it here.
+            </summary>
+        </member>
+        <member name="F:AvatarExtendedAudioContainer.eventTypes">
+            <summary>
+            The technique in which the sounds are played, per set.
+            <para/>
+            <strong>MODDERS, DO NOT USE THIS.</strong> Use <see cref="M:AvatarExtendedAudioContainer.GetEntries"/> instead.
+            </summary>
+        </member>
+        <member name="F:AvatarExtendedAudioContainer.playTypes">
+            <summary>
+            The technique in which the sounds are played, per set.
+            <para/>
+            <strong>MODDERS, DO NOT USE THIS.</strong> Use <see cref="M:AvatarExtendedAudioContainer.GetEntries"/> instead.
+            </summary>
+        </member>
+        <member name="F:AvatarExtendedAudioContainer.customEventTypes">
+            <summary>
+            The names of custom event types.
+            <para/>
+            <strong>MODDERS, DO NOT USE THIS.</strong> Use <see cref="M:AvatarExtendedAudioContainer.GetEntries"/> instead.
+            </summary>
+        </member>
+        <member name="F:AvatarExtendedAudioContainer.customPlayTypes">
+            <summary>
+            The name of a custom play mode.
+            <para/>
+            <strong>MODDERS, DO NOT USE THIS.</strong> Use <see cref="M:AvatarExtendedAudioContainer.GetEntries"/> instead.
+            </summary>
+        </member>
+        <member name="F:AvatarExtendedAudioContainer.pitchRanges">
+            <summary>
+            A range of pitch for the sound when playing, (min, max), centered about 1.0f
+            <para/>
+            <strong>MODDERS, DO NOT USE THIS.</strong> Use <see cref="M:AvatarExtendedAudioContainer.GetEntries"/> instead.
+            </summary>
+        </member>
+        <member name="F:AvatarExtendedAudioContainer.volumes">
+            <summary>
+            The volume of this sound group.
+            <para/>
+            <strong>MODDERS, DO NOT USE THIS.</strong> Use <see cref="M:AvatarExtendedAudioContainer.GetEntries"/> instead.
+            </summary>
+        </member>
+        <member name="F:AvatarExtendedAudioContainer.mixers">
+            <summary>
+            Which mixer the sound goes into.
+            <para/>
+            <strong>MODDERS, DO NOT USE THIS.</strong> Use <see cref="M:AvatarExtendedAudioContainer.GetEntries"/> instead.
+            </summary>
+        </member>
+        <member name="F:AvatarExtendedAudioContainer.soundFlags">
+            <summary>
+            Which sound flags this should play with.
+            <para/>
+            <strong>MODDERS, DO NOT USE THIS.</strong> Use <see cref="M:AvatarExtendedAudioContainer.GetEntries"/> instead.
+            </summary>
+        </member>
+        <member name="F:AvatarExtendedAudioContainer.templateSources">
+            <summary>
+            An audio source that will be cloned when playing the applicable sound effects.
+            <para/>
+            <strong>MODDERS, DO NOT USE THIS.</strong> Use <see cref="M:AvatarExtendedAudioContainer.GetEntries"/> instead.
+            </summary>
+        </member>
+        <member name="M:AvatarExtendedAudioContainer.EnsureSymmetry">
+            <summary>
+            Fixes an issue that is caused if the arrays get different lengths.
+            </summary>
+        </member>
+        <member name="M:AvatarExtendedAudioContainer.Sounds2DToAbyssmalMappedArray">
+            <summary>
+            "Decompresses" <see cref="F:AvatarExtendedAudioContainer.sounds"/> into a long 1D array of every single combined sound, and a companion array
+            of the lengths of each subsection in that 1D array, so that Unity can serialize it.
+            </summary>
+        </member>
+        <member name="M:AvatarExtendedAudioContainer.AbyssmalMappedArrayToSounds2D">
+            <summary>
+            "Compresses" <see cref="F:AvatarExtendedAudioContainer.sounds"/> by collecting all elements out of <see cref="F:AvatarExtendedAudioContainer.allOfTheSounds"/>, a massive
+            1D array of every combined sound across all of the usually separate blocks, and segments the array
+            based on the lengths provided by <see cref="F:AvatarExtendedAudioContainer.lengthsOfEachSegment"/>.
+            </summary>
+        </member>
+        <member name="M:AvatarExtendedAudioContainer.GetEntries">
+            <summary>
+            Returns a cached list of all entries.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:AvatarExtendedAudioContainer.Entries">
+            <summary>
+            The audio entries associated with this container.
+            </summary>
+        </member>
+        <member name="M:AvatarExtendedAudioContainer.UpdateEntries">
+            <summary>
+            Creates <see cref="P:AvatarExtendedAudioContainer.Entries"/> by copying all data in this object into the array.
+            </summary>
+        </member>
+        <member name="T:AvatarStatDriver">
+            <summary>
+            This component is responsible for <em>providing</em> the stats of an avatar when it spawns.
+            Actually applying these stats is done by the <see cref="T:AvatarStatExtender.Tools.StatMarshaller"/>
+            </summary>
+        </member>
+        <member name="P:AvatarStatDriver.VanillaAgility">
+            <summary>
+            The value of this avatar's agility in the vanilla game.
+            </summary>
+        </member>
+        <member name="P:AvatarStatDriver.VanillaSpeed">
+            <summary>
+            The value of this avatar's speed in the vanilla game.
+            </summary>
+        </member>
+        <member name="P:AvatarStatDriver.VanillaUpperStrength">
+            <summary>
+            The value of this avatar's upper strength in the vanilla game.
+            </summary>
+        </member>
+        <member name="P:AvatarStatDriver.VanillaLowerStrength">
+            <summary>
+            The value of this avatar's lower strength in the vanilla game.
+            </summary>
+        </member>
+        <member name="P:AvatarStatDriver.VanillaVitality">
+            <summary>
+            The value of this avatar's vitality in the vanilla game.
+            </summary>
+        </member>
+        <member name="P:AvatarStatDriver.VanillaIntelligence">
+            <summary>
+            The value of this avatar's intelligence in the vanilla game.
+            </summary>
+        </member>
+        <member name="P:AvatarStatDriver.VanillaTotalMass">
+            <summary>
+            The avatar's total mass as computed in vanilla, in kilograms.
+            </summary>
+        </member>
+        <member name="P:AvatarStatDriver.VanillaChestMass">
+            <summary>
+            The mass of the avatar's upper half of the torso, as computed in vanilla, in kilograms.
+            </summary>
+        </member>
+        <member name="P:AvatarStatDriver.VanillaPelvisMass">
+            <summary>
+            The mass of the avatar's lower half of the torso, as computed in vanilla, in kilograms.
+            </summary>
+        </member>
+        <member name="P:AvatarStatDriver.VanillaArmMass">
+            <summary>
+            The mass of a single arm on this avatar, in kilograms.
+            </summary>
+        </member>
+        <member name="P:AvatarStatDriver.VanillaLegMass">
+            <summary>
+            The mass of a single leg on this avatar, in kilograms.
+            </summary>
+        </member>
+        <member name="P:AvatarStatDriver.VanillaHeadMass">
+            <summary>
+            The mass of this avatar's head, in kilograms.
+            </summary>
+        </member>
+        <member name="P:AvatarStatDriver.EffectiveAgility">
+            <summary>
+            The final result of what this avatar's agility should be, determined by all settings of this object.
+            </summary>
+        </member>
+        <member name="P:AvatarStatDriver.EffectiveSpeed">
+            <summary>
+            The final result of what this avatar's speed should be, determined by all settings of this object.
+            </summary>
+        </member>
+        <member name="P:AvatarStatDriver.EffectiveUpperStrength">
+            <summary>
+            The final result of what this avatar's upper body strength should be, determined by all settings of this object.
+            </summary>
+        </member>
+        <member name="P:AvatarStatDriver.EffectiveLowerStrength">
+            <summary>
+            The final result of what this avatar's lower body strength should be, determined by all settings of this object.
+            </summary>
+        </member>
+        <member name="P:AvatarStatDriver.EffectiveVitality">
+            <summary>
+            The final result of what this avatar's vitality should be, determined by all settings of this object.
+            </summary>
+        </member>
+        <member name="P:AvatarStatDriver.EffectiveIntelligence">
+            <summary>
+            The final result of what this avatar's intelligence should be, determined by all settings of this object.
+            </summary>
+        </member>
+        <member name="P:AvatarStatDriver.MassProportion">
+            <summary>
+            The proportion of mass used when custom masses are enabled, and proportional mass editing is enabled.
+            <para/>
+            This value is multiplied with the vanilla body part masses to get their effective results. Returns 1.0f in all other cases where customization isn't applicable.
+            </summary>
+        </member>
+        <member name="P:AvatarStatDriver.EffectiveTotalMass">
+            <summary>
+            The effective total mass of this avatar, which combines all other effective values, unless proportional editing is desired (from which the
+            custom value is used) or if custom masses are disabled (from which the vanilla value is used).
+            </summary>
+        </member>
+        <member name="P:AvatarStatDriver.EffectivePelvisMass">
+            <summary>
+            The mass of the pelvis, computed from the desired settings.
+            </summary>
+        </member>
+        <member name="P:AvatarStatDriver.EffectiveChestMass">
+            <summary>
+            The mass of the chest, computed from the desired settings.
+            </summary>
+        </member>
+        <member name="P:AvatarStatDriver.EffectiveArmMass">
+            <summary>
+            The effective mass of one arm, computed from the desired settings.
+            </summary>
+        </member>
+        <member name="P:AvatarStatDriver.EffectiveLegMass">
+            <summary>
+            The effective mass of one leg, computed from the desired settings.
+            </summary>
+        </member>
+        <member name="P:AvatarStatDriver.EffectiveHeadMass">
+            <summary>
+            The effective head mass, computed from the desired settings.
+            </summary>
+        </member>
+    </members>
+</doc>

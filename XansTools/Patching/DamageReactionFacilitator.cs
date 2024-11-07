@@ -88,9 +88,7 @@ namespace XansTools.Patching {
 
 		private static unsafe void PlayerTAKEDAMAGECalled(IntPtr @this, float damage, IntPtr method) {
 			Log.Trace($"Executing TAKEDAMAGE phase: Before...");
-			Thread.BeginCriticalRegion(); // Is this even needed? I forgot if multithreaded execution is even possible.
-										  // If it is, this basically says "hold your shit for a sec I gotta do something perfectly here, lemme cook rq"
-
+			
 			Player_Health healthObj = new Player_Health(@this);
 			float originalDamage = damage;
 			try {
@@ -108,21 +106,16 @@ namespace XansTools.Patching {
 				Log.Error($"Failed to execute {nameof(OnPlayerTAKEDAMAGECalled)} phase: After!");
 				Log.Error(exc);
 			}
-
-			Thread.EndCriticalRegion();
+			Log.Trace("Exiting TAKEDAMAGE event code.");
 		}
 
 		private static unsafe void OnPlayerDamageReceived(IntPtr @this, IntPtr attack, PlayerDamageReceiver.BodyPart part, IntPtr method) {
-			Thread.BeginCriticalRegion(); // Is this even needed? I forgot if multithreaded execution is even possible.
-										  // If it is, this basically says "hold your shit for a sec I gotta do something perfectly here, lemme cook rq"
-
 			Player_Health healthObj = new Player_Health(@this);
 			AttackInfo* atkPtr = (AttackInfo*)attack;
 			AttackInfo atk = *atkPtr;
 			AttackInfo dupeRaw = atk; // Copy by value
 			ImmutableAttackInfo dupe = *(ImmutableAttackInfo*)(&dupeRaw);
 			PlayerDamageReceiver.BodyPart dupePart = part;
-
 
 			Log.Trace("Executing player damage phase: Before...");
 			try {
@@ -148,8 +141,7 @@ namespace XansTools.Patching {
 				Log.Error($"Failed to execute {nameof(OnPlayerDamageTaken)} phase: After!");
 				Log.Error(exc);
 			}
-
-			Thread.EndCriticalRegion();
+			Log.Trace("Exiting player damage event code.");
 		}
 
 		// TO FUTURE PROGRAMMERS OR ME:

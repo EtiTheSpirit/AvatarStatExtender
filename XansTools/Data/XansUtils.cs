@@ -29,12 +29,23 @@ namespace XansTools.Data {
 			ParameterInfo[] @params = detour.Method.GetParameters();
 			if (@params.Any(param => !param.ParameterType.IsValueType)) throw new InvalidOperationException("For patch methods, all parameters should be value types. To receive an object type, instead receive IntPtr and then create a pointer to that object.");
 
+			size_t tgtPtr = *(size_t*)(size_t)typeof(TMethodOwner).GetField(ptrFieldName, BindingFlags.NonPublic | BindingFlags.Static)!.GetValue(null)!;
+			size_t desiredPatch = detour.Method.MethodHandle.GetFunctionPointer();
+
+			NativeHook<TDelegate> hook = new NativeHook<TDelegate>(tgtPtr, desiredPatch);
+			hook.Attach();
+			return hook.Trampoline;
+			//MelonUtils.NativeHookAttach((size_t)(&tgtPtr), desiredPatch);
+			//return Marshal.GetDelegateForFunctionPointer<TDelegate>(tgtPtr);
+			/*
 			CppMethod* tgtPtr = GetFunctionPointerFromField<TMethodOwner>(ptrFieldName);
 			CppMethod* desiredPatch = (CppMethod*)detour.Method.MethodHandle.GetFunctionPointer();
 
 			return NativeHookAttach<TDelegate>(tgtPtr, desiredPatch);
+			*/
 		}
 
+		/*
 		/// <summary>
 		/// Accesses the field of the provided name, which stores a two-layer pointer (a pointer to yet another memory address).
 		/// The first layer pointer is resolved to go to the other address, which itself is the address of a function (thus, a function pointer).
@@ -58,12 +69,13 @@ namespace XansTools.Data {
 		/// <returns></returns>
 		private static TDelegate NativeHookAttach<TDelegate>(CppMethod* target, CppMethod* patch) where TDelegate : Delegate {
 			if (target == null) throw new ArgumentNullException(nameof(target));
+			//CppMethod* buf = target;
 
 			NativeHook<TDelegate> hook = new NativeHook<TDelegate>((size_t)target, (size_t)patch);
 			hook.Attach();
-			TDelegate @delegate = Marshal.GetDelegateForFunctionPointer<TDelegate>((size_t)target);
-			return @delegate;
+			return @delegate.Trampoline;
 		}
+		*/
 
 		/// <summary>
 		/// Quickly accesses a method from the provided type <typeparamref name="T"/>.

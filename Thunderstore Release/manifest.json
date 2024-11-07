@@ -1,0 +1,9 @@
+{
+    "name": "AvatarStatExtender",
+    "version_number": "2.0.0",
+    "website_url": "https://github.com/EtiTheSpirit/AvatarStatExtender",
+    "description": "Set your avatar's stats and extra sounds from the SDK, and load them in game seamlessly. True stat customization.",
+    "dependencies": [
+        "WNP78-FieldInjector-2.0.400"
+    ]
+}

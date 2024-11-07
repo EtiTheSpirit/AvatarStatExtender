@@ -25,9 +25,9 @@ namespace XansTools.Data {
 		private Vector3 _direction;
 		private byte _backFacing;
 		private int _orderInPool;
-		private void* _collider;
+		private IntPtr _collider;
 		private AttackType _attackType;
-		private void* _proxy;
+		private IntPtr _proxy;
 
 		/// <summary>
 		/// The absolute amount of damage this attack did.
@@ -78,8 +78,8 @@ namespace XansTools.Data {
 		/// The collider that the attack impacted with to result in this damage occurring.
 		/// </summary>
 		public Collider Collider {
-			get => new Collider((IntPtr)_collider);
-			set => _collider = (void*)value.Pointer;
+			get => new Collider(_collider);
+			set => _collider = value.Pointer;
 		}
 
 		/// <summary>
@@ -92,8 +92,8 @@ namespace XansTools.Data {
 
 
 		public TriggerRefProxy Proxy {
-			get => new TriggerRefProxy((IntPtr)_proxy);
-			set => _proxy = (void*)value.Pointer;
+			get => new TriggerRefProxy(_proxy);
+			set => _proxy = value.Pointer;
 		}
 
 		/// <summary>

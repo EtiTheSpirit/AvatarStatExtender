@@ -1,0 +1,299 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>XansTools</name>
+    </assembly>
+    <members>
+        <member name="T:XansTools.AvatarInteroperability.DamageReceptionHelper">
+            <summary>
+            This object helps to handle receiving and coalescing damage events from the <see cref="T:XansTools.Patching.DamageReactionFacilitator"/>, which
+            fires for verbose <see cref="!:Player_Health.OnReceivedDamage(Attack, PlayerDamageReceiver.BodyPart)"/> calls <em>and</em>
+            general <see cref="M:Il2CppSLZ.Marrow.Player_Health.TAKEDAMAGE(System.Single)"/> calls, providing a single event that allows early intercepting
+            (and/or reacting after) damage has occurred to the player, in a convenient and simple singular event.
+            </summary>
+        </member>
+        <member name="F:XansTools.AvatarInteroperability.DamageReceptionHelper._isAboutToExecuteTAKEDAMAGEFromRecv">
+            <summary>
+            This stack helps prevent re-entry 
+            </summary>
+        </member>
+        <member name="E:XansTools.AvatarInteroperability.DamageReceptionHelper.OnDamageTaken">
+            <summary>
+            Subscribe to this event to receive damage notifications.
+            <para/>
+            <strong>IMPORTANT:</strong> This event fires <strong>twice</strong>, once before, where the <c>attack</c> parameter can optionally be edited,
+            and once after. You can tell which phase you are in via the <see cref="T:XansTools.Data.EventPhase"/> parameter.
+            <para/>
+            This event fires for both <see cref="M:Il2CppSLZ.Marrow.Player_Health.TAKEDAMAGE(System.Single)"/> calls <em>and</em> <see cref="!:Player_Health.OnReceivedDamage(SLZ.Combat.Attack, PlayerDamageReceiver.BodyPart)"/>,
+            so pay attention to the presence of <c>editableAttack</c> and its related parameters, which are <see langword="null"/> if something calls <see cref="M:Il2CppSLZ.Marrow.Player_Health.TAKEDAMAGE(System.Single)"/>.
+            </summary>
+        </member>
+        <member name="T:XansTools.AvatarInteroperability.DamageReceptionHelper.DamageReceptionDelegate">
+            <summary>
+            This delegate is used when receiving damage events.
+            </summary>
+            <param name="health">The health object of the person that took the damage.</param>
+            <param name="attackInfoAndPartAvailable">If <see langword="true"/>, <paramref name="attack"/> (and its original copy) have additional data in them, more than just the damage.</param>
+            <param name="originalAttack">The original copy of all attack data before events were invoked. Always includes the damage. This may be missing data even if <paramref name="attackInfoAndPartAvailable"/> is <see langword="true"/> (which occurs if someone sets it).</param>
+            <param name="attack">The attack data as it was since the last event handler got invoked. Only includes damage (and nothing else) when <paramref name="attackInfoAndPartAvailable"/> is <see langword="false"/>.</param>
+            <param name="originalPart">The original body part that the attack hit before events were invoked.</param>
+            <param name="part">The body part that was hit, as of the last event handler that got invoked.</param>
+            <param name="phase">When this event is executing, either <see cref="F:XansTools.Data.EventPhase.Before"/> the original game method or <see cref="F:XansTools.Data.EventPhase.After"/>.</param>
+        </member>
+        <member name="T:XansTools.Data.AttackInfo">
+            <summary>
+            A recreation of the Attack data (see <see cref="T:Il2CppSLZ.Marrow.Combat.Attack"/>) that fixes the data stored within.
+            <para/>
+            This is one of those cases of "I don't know why this fixes it, but it does, and if you use <see cref="T:Il2CppSLZ.Marrow.Combat.Attack"/> it breaks".
+            I suspect this is caused by some fuckery with <see cref="F:XansTools.Data.AttackInfo._backFacing"/> being byte vs. bool and how that plays with
+            pointer garbage. Will have to research more, but what matters is that this struct fixes it.
+            </summary>
+        </member>
+        <member name="P:XansTools.Data.AttackInfo.Damage">
+            <summary>
+            The absolute amount of damage this attack did.
+            </summary>
+        </member>
+        <member name="P:XansTools.Data.AttackInfo.Normal">
+            <summary>
+            The normal of the surface that this attack hit.
+            </summary>
+        </member>
+        <member name="P:XansTools.Data.AttackInfo.Direction">
+            <summary>
+            The direction this attack came from.
+            </summary>
+        </member>
+        <member name="P:XansTools.Data.AttackInfo.Origin">
+            <summary>
+            The origin of this attack source. Can be combined with direction to create a ray.
+            </summary>
+        </member>
+        <member name="P:XansTools.Data.AttackInfo.IsBackFacing">
+            <summary>
+            If true, the attack occurred from within the hit area.
+            </summary>
+        </member>
+        <member name="P:XansTools.Data.AttackInfo.Collider">
+            <summary>
+            The collider that the attack impacted with to result in this damage occurring.
+            </summary>
+        </member>
+        <member name="P:XansTools.Data.AttackInfo.DamageType">
+            <summary>
+            What type(s) of damage this attack has on it.
+            </summary>
+        </member>
+        <member name="M:XansTools.Data.AttackInfo.Fix(Il2CppSLZ.Marrow.Combat.Attack)">
+            <summary>
+            Provide an <see cref="T:Il2CppSLZ.Marrow.Combat.Attack"/> instance to return a new instance of this struct. This will fix values like the <see cref="F:XansTools.Data.AttackInfo._attackType"/>.
+            </summary>
+            <param name="attack"></param>
+            <returns></returns>
+        </member>
+        <member name="M:XansTools.Data.AttackInfo.From(System.IntPtr)">
+            <summary>
+            Provide an <see cref="T:Il2CppSLZ.Marrow.Combat.Attack"/> instance to return a new instance of this struct. This will fix values like the <see cref="F:XansTools.Data.AttackInfo._attackType"/>.
+            </summary>
+            <param name="attack"></param>
+            <returns></returns>
+        </member>
+        <member name="T:XansTools.Data.ImmutableAttackInfo">
+            <summary>
+            The same as <see cref="T:XansTools.Data.AttackInfo"/> but it is immutable; it cannot be changed.
+            </summary>
+        </member>
+        <member name="P:XansTools.Data.ImmutableAttackInfo.Damage">
+            <summary>
+            The absolute amount of damage this attack did.
+            </summary>
+        </member>
+        <member name="P:XansTools.Data.ImmutableAttackInfo.Normal">
+            <summary>
+            The normal of the surface that this attack hit.
+            </summary>
+        </member>
+        <member name="P:XansTools.Data.ImmutableAttackInfo.Direction">
+            <summary>
+            The direction this attack came from.
+            </summary>
+        </member>
+        <member name="P:XansTools.Data.ImmutableAttackInfo.Origin">
+            <summary>
+            The origin of this attack source. Can be combined with direction to create a ray.
+            </summary>
+        </member>
+        <member name="P:XansTools.Data.ImmutableAttackInfo.IsBackFacing">
+            <summary>
+            If true, the attack occurred from within the hit area.
+            </summary>
+        </member>
+        <member name="P:XansTools.Data.ImmutableAttackInfo.Collider">
+            <summary>
+            The collider that the attack impacted with to result in this damage occurring.
+            </summary>
+        </member>
+        <member name="P:XansTools.Data.ImmutableAttackInfo.DamageType">
+            <summary>
+            What type(s) of damage this attack has on it.
+            </summary>
+        </member>
+        <member name="T:XansTools.Data.BlamedEvent`2">
+            <summary>
+            An event wrapper that invokes each individual subscriber in a try/catch block.
+            This sacrifices speed in favor of safety for a public interface, and also improves
+            logging by requiring a mod to "blame" for any exceptions that are raised.
+            </summary>
+            <typeparam name="TArgs">A package for the arguments of this call.</typeparam>
+            <typeparam name="TReturn">The return value. This can be <see cref="T:System.Object"/> and then always return null when not applicable.</typeparam>
+        </member>
+        <member name="P:XansTools.Data.BlamedEvent`2.Name">
+            <summary>
+            A display name for this event that can be used in logging.
+            </summary>
+        </member>
+        <member name="P:XansTools.Data.BlamedEvent`2.UpdateArgsWithReturnValue">
+            <summary>
+            This delegate can should update the provided <typeparamref name="TArgs"/> after every event invocation.
+            This can be used if the arguments store the last return value.
+            </summary>
+        </member>
+        <member name="M:XansTools.Data.BlamedEvent`2.GetSubscriptionService(MelonLoader.MelonMod)">
+            <summary>
+            Returns an instance of <see cref="T:XansTools.Data.BlamedEvent`2.Accessor"/> which allows your mod to (un)subscribe to and from this event.
+            </summary>
+            <param name="yourMod"></param>
+        </member>
+        <member name="M:XansTools.Data.BlamedEvent`2.Accessor.Subscribe(System.Func{`0,XansTools.Data.EventPhase,`1},XansTools.Data.EventPhase,System.Boolean)">
+            <summary>
+            Subscribe this event 
+            </summary>
+            <param name="delegate">The delegate to subscribe to this event, which will be invoked when this event fires.</param>
+            <param name="unsubscribeAutomaticallyIfMelonUnloaded">If true, and if the mod is unloaded, then the provided delegate will be automatically unsubscribed.</param>
+        </member>
+        <member name="T:XansTools.Data.EventPhase">
+            <summary>
+            Represents when an event has executed.
+            </summary>
+        </member>
+        <member name="F:XansTools.Data.EventPhase.Before">
+            <summary>
+            This event fired before the original method executed.
+            </summary>
+        </member>
+        <member name="F:XansTools.Data.EventPhase.After">
+            <summary>
+            This event fired after the original method executed.
+            </summary>
+        </member>
+        <member name="T:XansTools.Data.Player">
+            <summary>
+            A modification of BoneLib's player class.
+            </summary>
+        </member>
+        <member name="P:XansTools.Data.Player.Avatar">
+            <summary>
+            The player's current avatar, or null if there is no loaded rig manager.
+            </summary>
+        </member>
+        <member name="P:XansTools.Data.Player.RigMgr">
+            <summary>
+            The <see cref="T:Il2CppSLZ.Marrow.RigManager"/> belonging to this player.
+            </summary>
+        </member>
+        <member name="P:XansTools.Data.Player.PhysRig">
+            <summary>
+            The <see cref="T:Il2CppSLZ.Marrow.PhysicsRig"/> belonging to this player.
+            </summary>
+        </member>
+        <member name="M:XansTools.Data.Player.GetCurrentAvatar">
+            <summary>
+            Returns the Player's current <see cref="P:XansTools.Data.Player.Avatar"/>, or <see langword="null"/> if no <see cref="T:Il2CppSLZ.Marrow.RigManager"/> is available. 
+            </summary>
+        </member>
+        <member name="M:XansTools.Data.XansUtils.NativeHookAttachFrom``2(System.String,``1)">
+            <summary>
+            Provided with the owner of the method being patched (an il2cpp class), and a delegate type for that method's hook, this will automatically
+            perform a native hook into said method that redirects to the desired delegate. The original method is returned.
+            </summary>
+            <typeparam name="TMethodOwner"></typeparam>
+            <typeparam name="TDelegate"></typeparam>
+            <param name="ptrFieldName"></param>
+            <param name="detour"></param>
+            <returns></returns>
+            <exception cref="T:System.InvalidOperationException"></exception>
+        </member>
+        <member name="M:XansTools.Data.XansUtils.GetFunctionPointerFromField``1(System.String)">
+            <summary>
+            Accesses the field of the provided name, which stores a two-layer pointer (a pointer to yet another memory address).
+            The first layer pointer is resolved to go to the other address, which itself is the address of a function (thus, a function pointer).
+            </summary>
+            <typeparam name="TMethodOwner"></typeparam>
+            <param name="ptrFieldName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:XansTools.Data.XansUtils.NativeHookAttach``1(XansTools.Data.XansUtils.CppMethod*,XansTools.Data.XansUtils.CppMethod*)">
+            <summary>
+            Mimics <see cref="M:MelonLoader.MelonUtils.NativeHookAttach(System.IntPtr,System.IntPtr)"/> using newer API.
+            </summary>
+            <typeparam name="TDelegate"></typeparam>
+            <param name="target"></param>
+            <param name="patch"></param>
+            <returns></returns>
+        </member>
+        <member name="M:XansTools.Data.XansUtils.QuickGetMethod``1(System.String)">
+            <summary>
+            Quickly accesses a method from the provided type <typeparamref name="T"/>.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="T:XansTools.Data.XansUtils.CppMethod">
+            <summary>
+            A purposeful zero-size struct as a replacement to <see cref="T:System.Void"/>.
+            <para/>
+            The entire purpose of this struct is mnemonic - it helps with code readability,
+            as <c><see cref="T:XansTools.Data.XansUtils.CppMethod"/>*</c> makes more evident sense than <c><see cref="T:System.Void"/>*</c>
+            </summary>
+        </member>
+        <member name="T:XansTools.Log">
+            <summary>
+            Provides a wider variety of logging methods for convenience.
+            </summary>
+        </member>
+        <member name="T:XansTools.Patching.DamageReactionFacilitator">
+            <summary>
+            Provides events that allow mods to intercept and react to taking damage, be it a player or an npc.
+            <para/>
+            <strong>Consider using <see cref="T:XansTools.AvatarInteroperability.DamageReceptionHelper"/>.</strong> It joins the two events of this
+            class into one and handles a bunch of weird edge cases for you.
+            </summary>
+        </member>
+        <member name="F:XansTools.Patching.DamageReactionFacilitator.METHOD_PTR_FLD_NAME_PLAYER">
+            <summary>The name of the field storing the function pointer for Player_Health.OnReceivedDamage</summary>
+        </member>
+        <member name="F:XansTools.Patching.DamageReactionFacilitator.METHOD_PTR_FLD_NAME_PLAYER_TAKEDAMAGE">
+            <summary>The name of the field storing the function pointer for Player_Health.TAKEDAMAGE</summary>
+        </member>
+        <member name="E:XansTools.Patching.DamageReactionFacilitator.OnPlayerDamageTaken">
+            <summary>
+            This event fires when a player takes any sort of damage.
+            <para/>
+            It contains the attack responsible for the damage as well as the body part that it hit. For more specific body parts, the <see cref="T:XansTools.Data.AttackInfo"/>
+            includes the collider that was impacted.
+            <para/>
+            <strong>This event fires twice!</strong> Pay attention to the <c>phase</c> parameter, which indicates if this event has fired before or after
+            the attack occurred. Receivers can modify the incoming <c>attack</c> parameter to change values like its damage. Note that the original game
+            method does changes to the damage and so early receivers (which execute <em>before</em> the game runs its code) will <strong>not</strong> see 
+            things like damage bonuses from headshots.
+            </summary>
+        </member>
+        <member name="E:XansTools.Patching.DamageReactionFacilitator.OnPlayerTAKEDAMAGECalled">
+            <summary>
+            This event is called when <see cref="M:Il2CppSLZ.Marrow.Player_Health.TAKEDAMAGE(System.Single)"/> is called. This is called by OnReceivedDamage (see <see cref="E:XansTools.Patching.DamageReactionFacilitator.OnPlayerDamageTaken"/>)
+            but has, as should be obvious from its signature, far less context than 
+            </summary>
+        </member>
+    </members>
+</doc>
