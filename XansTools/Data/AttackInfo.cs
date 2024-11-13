@@ -69,6 +69,9 @@ namespace XansTools.Data {
 			set => _backFacing = (byte)(value ? 1 : 0);
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
 		public int OrderInAttackPool {
 			get => _orderInPool;
 			set => _orderInPool = value;
@@ -90,7 +93,9 @@ namespace XansTools.Data {
 			set => _attackType = value;
 		}
 
-
+		/// <summary>
+		/// 
+		/// </summary>
 		public TriggerRefProxy Proxy {
 			get => new TriggerRefProxy(_proxy);
 			set => _proxy = value.Pointer;
@@ -118,6 +123,14 @@ namespace XansTools.Data {
 				AttackInfo* atk = (AttackInfo*)attack;
 				return *atk;
 			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public override string ToString() {
+			return $"AttackInfo[Damage={Damage}, Normal={Normal}, Origin={Origin}, Direction={Direction}, BackFacing={IsBackFacing}, OrderInAttackPool={OrderInAttackPool}, DamageType={DamageType}]";
 		}
 	}
 

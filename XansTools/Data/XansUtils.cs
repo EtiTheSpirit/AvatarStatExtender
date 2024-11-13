@@ -22,19 +22,22 @@ namespace XansTools.Data {
 		/// <param name="detour"></param>
 		/// <returns></returns>
 		/// <exception cref="InvalidOperationException"></exception>
-		public static TDelegate NativeHookAttachFrom<TMethodOwner, TDelegate>(string ptrFieldName, TDelegate detour) where TDelegate : Delegate {
+		public static NativeHook<TDelegate> NativeHookAttachFrom<TMethodOwner, TDelegate>(string ptrFieldName, TDelegate detour) where TDelegate : Delegate {
 			if (detour == null) throw new ArgumentNullException(nameof(detour));
 			if (detour.Method == null) throw new InvalidOperationException($"Parameter '{nameof(detour)}' does not have a Method?");
 
 			ParameterInfo[] @params = detour.Method.GetParameters();
 			if (@params.Any(param => !param.ParameterType.IsValueType)) throw new InvalidOperationException("For patch methods, all parameters should be value types. To receive an object type, instead receive IntPtr and then create a pointer to that object.");
 
+			//CppMethod* tgtPtrReal = *(CppMethod**)(size_t)typeof(TMethodOwner).GetField(ptrFieldName, BindingFlags.NonPublic | BindingFlags.Static)!.GetValue(null)!;
+
+			// I hate this.
 			size_t tgtPtr = *(size_t*)(size_t)typeof(TMethodOwner).GetField(ptrFieldName, BindingFlags.NonPublic | BindingFlags.Static)!.GetValue(null)!;
 			size_t desiredPatch = detour.Method.MethodHandle.GetFunctionPointer();
 
 			NativeHook<TDelegate> hook = new NativeHook<TDelegate>(tgtPtr, desiredPatch);
 			hook.Attach();
-			return hook.Trampoline;
+			return hook;
 			//MelonUtils.NativeHookAttach((size_t)(&tgtPtr), desiredPatch);
 			//return Marshal.GetDelegateForFunctionPointer<TDelegate>(tgtPtr);
 			/*

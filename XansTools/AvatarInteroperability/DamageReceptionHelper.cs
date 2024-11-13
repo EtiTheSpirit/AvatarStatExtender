@@ -15,7 +15,7 @@ namespace XansTools.AvatarInteroperability {
 
 	/// <summary>
 	/// This object helps to handle receiving and coalescing damage events from the <see cref="DamageReactionFacilitator"/>, which
-	/// fires for verbose <see cref="Player_Health.OnReceivedDamage(Attack, PlayerDamageReceiver.BodyPart)"/> calls <em>and</em>
+	/// fires for verbose <see cref="Player_Health.OnReceivedDamage(Il2CppSLZ.Marrow.Combat.Attack, PlayerDamageReceiver.BodyPart)"/> calls <em>and</em>
 	/// general <see cref="Player_Health.TAKEDAMAGE(float)"/> calls, providing a single event that allows early intercepting
 	/// (and/or reacting after) damage has occurred to the player, in a convenient and simple singular event.
 	/// </summary>
@@ -34,7 +34,7 @@ namespace XansTools.AvatarInteroperability {
 		/// <strong>IMPORTANT:</strong> This event fires <strong>twice</strong>, once before, where the <c>attack</c> parameter can optionally be edited,
 		/// and once after. You can tell which phase you are in via the <see cref="EventPhase"/> parameter.
 		/// <para/>
-		/// This event fires for both <see cref="Player_Health.TAKEDAMAGE(float)"/> calls <em>and</em> <see cref="Player_Health.OnReceivedDamage(SLZ.Combat.Attack, PlayerDamageReceiver.BodyPart)"/>,
+		/// This event fires for both <see cref="Player_Health.TAKEDAMAGE(float)"/> calls <em>and</em> <see cref="Player_Health.OnReceivedDamage(Il2CppSLZ.Marrow.Combat.Attack, PlayerDamageReceiver.BodyPart)"/>,
 		/// so pay attention to the presence of <c>editableAttack</c> and its related parameters, which are <see langword="null"/> if something calls <see cref="Player_Health.TAKEDAMAGE(float)"/>.
 		/// </summary>
 		public static event DamageReceptionDelegate OnDamageTaken {
