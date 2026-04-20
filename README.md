@@ -10,16 +10,16 @@ Avatar Extensions is a **hybrid SDK Plugin x MelonLoader mod** that allows you t
 
 The SDK and mod are both available on [the GitHub](https://github.com/EtiTheSpirit/AvatarStatExtender).
 
-## 🐞 I found a bug / ⚙ I have an idea!
+## I found a bug / I have an idea!
 Let me know [in the Issues tab at the top of the page](https://github.com/EtiTheSpirit/AvatarStatExtender/issues/new/choose) (or click that link).
 
-## 😒 Someone's avatar said it had custom stats, but it's not working!
+## Someone's avatar said it had custom stats, but it's not working!
 You need both their avatar *and this mod* (the mod is what tells the game to get rid of the vanilla stats and use these instead). See below for how to install.
 
-# 🍉 How To Install
+# How To Install
 There is a mod (that's this repo), and there's a Unity Package (for the editor, check the releases). This goes over installing the mod portion.
 
-## ⛽ Dependencies
+## Dependencies
 * [Download BoneLib](https://bonelab.thunderstore.io/package/gnonme/BoneLib/) first.
 * [Download FieldInjector](https://bonelab.thunderstore.io/package/WNP78/FieldInjector/) next.
 
@@ -27,7 +27,7 @@ There is a mod (that's this repo), and there's a Unity Package (for the editor, 
 ***
 ## I want to use custom stats on an avatar I installed!...
 
-### 🖥 ...And I am on PCVR
+### ...And I am on PCVR
 * Install MelonLoader. [Download it here](https://melonwiki.xyz/#/?id=automated-installation)
 	* YOU MUST USE MELONLOADER 0.5.7 - IF YOU DO NOT, YOUR GAME WILL CRASH AND BREAK.
 	* Launch the game without any mods installed. It will take longer than usual, but this sets it up for modding.
@@ -41,7 +41,7 @@ There is a mod (that's this repo), and there's a Unity Package (for the editor, 
 * Install this mod [by downloading it from the top most file from the Releases page](https://github.com/EtiTheSpirit/AvatarStatExtender/releases).
 * Now, if you download (or make) any avatars that use the Stat Driver, they will load their custom stats!
 ***
-### ♾ ...And I am on Quest
+### ...And I am on Quest
 > ⚠ **NOTE:** This hasn't been tested on Quest and was not made for it. This mod might be very broken, and I have no way to fix it for Quest!
 
 * Install LemonLoader. [Click here for a tutorial on YouTube](https://www.youtube.com/watch?v=Ax6vAd_lGsg)
